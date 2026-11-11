@@ -1,0 +1,4 @@
+action,sku,name,category,description,price,stock,status,featured,image_filename
+create,GH-205,Satin Glass Hinge Kit,Glass Door Hardware,Two-piece satin-finish hinge kit for frameless glass doors.,37.95,11,published,yes,GH-205.png
+create,GS-305,Frameless Panel Seal,Seals & Gaskets,Transparent silicone seal for a glass shower panel.,14.25,30,published,no,GS-305.png
+create,GT-505,Aluminum Installation Channel,Glazing Supplies,Anodized aluminum channel for fixed panel mounting.,26.50,18,published,no,GT-505.png

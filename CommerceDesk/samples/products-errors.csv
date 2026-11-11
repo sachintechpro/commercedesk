@@ -1,0 +1,4 @@
+action,sku,name,category,description,price,stock,status,featured,image_filename
+create,GH-101,Duplicate Existing Hinge,Glass Door Hardware,Should be blocked due to duplicate SKU.,19.50,10,published,no,GH-101.png
+create,GH-999,Broken Price Product,Glass Door Hardware,Should be blocked for invalid price.,-3.00,2,published,no,GH-999.png
+create,GS-999,Missing Category Product,,Should be blocked for missing category.,9.00,5,published,no,GS-999.png

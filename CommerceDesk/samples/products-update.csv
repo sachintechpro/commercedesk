@@ -1,0 +1,3 @@
+action,sku,name,category,description,price,stock,status,featured,image_filename
+update,GH-101,,,,28.50,,,,
+update,GC-301,,,,20.75,,,,

@@ -4,6 +4,11 @@
 
 CommerceDesk demonstrates the core mechanics of a conventional online wholesale store and its administration workflow. A public storefront and password-protected admin portal share an actual server-side SQLite catalog and order database. This is an **independent, fictional demonstration**; it has no integration with WGS Online, BigCommerce, ShipStation, a payment gateway, a shipping carrier, or real suppliers.
 
+CommerceDesk — Demo Login
+Admin page	/admin
+Username	admin@commercedesk.demo
+Password	DemoAdmin!2026
+
 ## Features
 
 **Public shopping experience**

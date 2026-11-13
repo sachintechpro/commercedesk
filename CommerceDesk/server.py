@@ -435,6 +435,7 @@ class Handler(BaseHTTPRequestHandler):
                 data=self.get_body() if method in ('POST','PUT','PATCH') else None
                 return self.api(method,path,data)
             if method!='GET':return self.out(405,error='Method not allowed.')
+            if path=='/qa-bench.html':return self.send_data(200,(ROOT/'qa-bench.html').read_bytes(),'text/html; charset=utf-8')
             if path=='/health':return self.out(200,status='ok')
             if path=='/robots.txt':
                 return self.send_data(200,'User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /api/admin\nSitemap: '+self.base_url()+'/sitemap.xml\n','text/plain; charset=utf-8')

@@ -49,7 +49,7 @@ test('Automation definitions are safe read-only checks, not static pass counters
     else assert.fail('Unsupported check kind '+c.id);
   }
   assert.ok((html+executableSource).includes('fetch(path,{method:\'GET\''),'HTTP checks should explicitly be GET');
-  assert.ok(html.includes('Not run'),'Results must be unexecuted until run');
+  assert.ok((html+executableSource).includes('Not run'),'Results must be unexecuted until run');
 });
 test('Manual results, defects, evidence and exports are functionally present',()=>{
   for(const s of ['manual-form','defect-form','evidence-upload','storeFile','openFile','export-json','export-csv','localStorage','indexedDB'])assert.ok((html+executableSource).includes(s),s);

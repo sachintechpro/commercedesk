@@ -1,0 +1,20 @@
+name: CommerceDesk API, Unit and Transaction Tests
+on:
+  push:
+    branches: [main]
+    paths:
+      - "CommerceDesk/**"
+      - ".github/workflows/commerce-api-tests.yml"
+  pull_request:
+  workflow_dispatch:
+jobs:
+  automated-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run real isolated Python tests
+        working-directory: CommerceDesk
+        run: python -m unittest discover -s tests -v

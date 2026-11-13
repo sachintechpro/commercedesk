@@ -4,7 +4,7 @@
 const C=JSON.parse(document.getElementById('qa-config').textContent);
 const KEY='qa-bench:'+C.slug+':v1';let state={executions:[],defects:[],evidence:[],customCases:[],auto:{}};
 try{const p=JSON.parse(localStorage.getItem(KEY)||'{}');if(p&&typeof p==='object'){for(const k of Object.keys(state))if(p[k]&& (Array.isArray(state[k])?Array.isArray(p[k]):typeof p[k]==='object'))state[k]=p[k];}}catch{}
-let tab='engineering',selected=(C.cases[0]||{}).id||'',showCase='',running=false;
+let tab='requirements',selected=(C.cases[0]||{}).id||'',showCase='',running=false;
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[ch]));
 const fmt=x=>esc(JSON.stringify(x,null,2));const cases=()=>[...C.cases,...state.customCases];
 const latest=id=>state.executions.find(x=>x.caseId===id);

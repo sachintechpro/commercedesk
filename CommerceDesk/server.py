@@ -289,7 +289,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('X-Content-Type-Options','nosniff')
         self.send_header('X-Frame-Options','DENY')
         self.send_header('Referrer-Policy','strict-origin-when-cross-origin')
-        self.send_header('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'; object-src 'none'")
+        self.send_header('Content-Security-Policy',"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.github.com; base-uri 'none'; frame-ancestors 'none'; object-src 'none'")
     def send_data(self,code,blob,mime='application/json; charset=utf-8',headers=None):
         if isinstance(blob,(dict,list)):blob=json.dumps(blob,ensure_ascii=False).encode()
         if isinstance(blob,str):blob=blob.encode()

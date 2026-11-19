@@ -29,12 +29,21 @@ try:
   page.goto(base+'/admin');page.locator('#admin-password').wait_for();page.locator('#admin-password').fill('BrowserTest!2026');page.get_by_role('button',name='Sign in to administration').click();page.wait_for_url('**/admin')
   page.get_by_text('Operations overview').wait_for();print('Admin login verified')
   page.goto(base+'/admin/products/GH-101');page.locator('#p-price').wait_for();page.locator('#p-price').fill('32.55');page.get_by_role('button',name='Save changes').click();page.wait_for_url('**/admin/products');page.goto(base+'/product/stainless-steel-glass-door-hinge-gh-101');page.get_by_text('$32.55').wait_for();print('Edit reflected on storefront')
-  page.goto(base+'/admin/import');page.locator('#csv-file').set_input_files(str(root/'samples'/'products-create.csv'))
+  page.goto(base+'/admin/import');page.locator('#batch-file').set_input_files(str(root/'samples'/'products-create.csv'))
   files=[str(root/'samples'/'images'/f'{sku}.png') for sku in ('GH-205','GS-305','GT-505')]
-  page.locator('#csv-images').set_input_files(files)
-  page.get_by_role('button',name='Read CSV & validate').click();page.get_by_text('3 valid / 0 invalid').wait_for(timeout=20000)
-  page.get_by_role('button',name='Publish validated batch').click();page.get_by_text('Batch imported successfully.').wait_for(timeout=20000)
-  page.goto(base+'/shop');page.get_by_text('Satin Glass Hinge Kit').wait_for();print('CSV import + storefront verified')
+  page.locator('#batch-images').set_input_files(files)
+  page.get_by_role('button',name='Review spreadsheet and match images').click();page.get_by_text('3 valid / 0 invalid').wait_for(timeout=20000)
+  page.get_by_role('button',name='Confirm and import products').click();page.get_by_text('Batch imported successfully.').wait_for(timeout=20000)
+  page.goto(base+'/shop');page.get_by_text('Satin Glass Hinge Kit').wait_for();print('Batch Import + storefront verified')
+  for route in ['/how-to','/about','/admin/integrations']:
+   response=page.request.get(base+route);assert response.status==200,(route,response.status)
+  print('Guided demo, About and Integrations routes verified')
+  started=time.perf_counter();catalog=page.request.get(base+'/api/catalog').json()['products'];durations=[]
+  for product in catalog:
+   t=time.perf_counter();detail=page.request.get(base+'/api/product/'+product['slug']);durations.append((time.perf_counter()-t)*1000);assert detail.status==200,product['sku']
+   image=page.request.get(base+product['image_url']);assert image.status==200,product['sku']
+  elapsed=(time.perf_counter()-started)*1000;assert elapsed<15000,elapsed
+  print('Product detail links + images verified:',len(catalog),'items in',round(elapsed,1),'ms')
   page.goto(base+'/admin/orders/DEMO-1002');page.get_by_text('Inventory shortage').wait_for();assert page.get_by_role('button',name='Generate sample shipping label').count()==0
   page.screenshot(path=str(root/'admin-preview.png'),full_page=True)
   print('Shortage label block verified')

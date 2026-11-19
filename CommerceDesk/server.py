@@ -193,6 +193,7 @@ def build_import_review(conn,payload):
         if action not in ('create','update'): errors['action']='Action must be create or update.'
         existing_row=conn.execute('SELECT * FROM products WHERE sku=?',(sku,)).fetchone()
         existing=dict(existing_row) if existing_row else None
+        if not slu and existing: slu=str(existing.get('slu_number') or '')
         if action=='create' and existing: errors['sku']='SKU already exists. Use action=update to modify it.'
         if action=='update' and not existing: errors['sku']='SKU not found. Use action=create for new products.'
         if action=='create' and not slu: errors['slu_number']='SLU number is required for every new product.'
@@ -210,7 +211,7 @@ def build_import_review(conn,payload):
         elif image and not slu: errors['slu_number']='SLU number is required to validate the product image.'
         if action=='create' and not image: errors['image']=errors.get('image','New products require a PNG image whose filename contains the SLU number.')
         row['slu_number']=slu
-        row['image_location']=row.get('image_location') or (image.get('filename') if image else filename)
+        row['image_location']=row.get('image_location') or (image.get('filename') if image else filename) or (existing or {}).get('image_location','')
         merged,field_errors=product_fields(row,existing if action=='update' else None,bool(image or (existing if action=='update' else False)))
         errors.update(field_errors)
         result.append({'row':i,'sku':sku,'slu_number':slu,'name':merged.get('name',''),'action':action,'errors':errors,'record':merged,'image_filename':Path(filename).name if filename else None,'image_location':merged.get('image_location','')})

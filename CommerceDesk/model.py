@@ -61,7 +61,8 @@ def verify_image(filename, data_b64, sku, slu_number=None):
     stem, ext = filename[:dot].upper() if dot > 0 else '', filename[dot:].lower() if dot > 0 else ''
     if slu_number:
         slu = str(slu_number).strip()
-        if ext != '.png' or not re.search(r'(?<![A-Z0-9])'+re.escape(slu)+r'(?![A-Z0-9])', stem):
+        pattern = r'(?<!\\d)'+re.escape(slu)+r'(?!\\d)' if slu.isdigit() else re.escape(slu)
+        if ext != '.png' or not re.search(pattern, stem):
             errors['image'] = f'PNG filename must contain the exact SLU number {slu} as a separate token.'
             raise InputError(errors)
     elif stem != sku or ext not in IMAGE_TYPES:

@@ -23,7 +23,7 @@ def _clean_rows(rows):
     for idx,values in enumerate(rows[1:],2):
         if not any(str(v or '').strip() for v in values): continue
         if len(result)>=MAX_ROWS: raise ValueError('Maximum 500 product rows per batch.')
-        row={headers[i]:str(values[i] if i<len(values) else '').strip() for i in range(len(headers))}
+        row={headers[i]:(str(int(values[i])) if i<len(values) and isinstance(values[i],float) and values[i].is_integer() else str(values[i] if i<len(values) else '').strip()) for i in range(len(headers))}
         result.append(row)
     if not result: raise ValueError('The spreadsheet contains no product rows.')
     return result

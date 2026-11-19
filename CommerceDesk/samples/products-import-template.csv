@@ -1,0 +1,2 @@
+action,sku,name,category,description,price,stock,status,featured,slu_number,image_location,image_filename,brand,uom,warehouse_location,bin_location,weight,dimensions,reorder_level,cost_price
+create,GL-1001,Tempered Glass Panel,Glazing Supplies,Clear tempered safety glass panel,89.00,12,published,no,782341,catalog/glass/782341_front.png,782341_front.png,Demo Glass,Each,Main Warehouse,GL-A-01,12 lb,24 x 36 in,3,52.00

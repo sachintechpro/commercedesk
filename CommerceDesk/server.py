@@ -20,6 +20,7 @@ from urllib.parse import parse_qs, urlparse, quote
 from xml.sax.saxutils import escape as xml_escape
 
 from model import CATEGORIES, InputError, order_decision, product_fields, read_csv, sku_value, verify_image
+from batch_import import parse_import_source
 
 ROOT=Path(__file__).resolve().parent
 DB_PATH=Path(os.environ.get('COMMERCE_DB_PATH',str(ROOT/'data'/'commerce.sqlite3')))
@@ -31,7 +32,7 @@ if not ADMIN_PASSWORD:
         raise RuntimeError('Set ADMIN_PASSWORD in Render environment before launching CommerceDesk.')
     ADMIN_PASSWORD='DemoAdmin!2026'
 SECRET=(os.environ.get('SESSION_SECRET') or secrets.token_hex(32)).encode()
-MAX_BODY=12_000_000
+MAX_BODY=20_000_000
 
 SAMPLE_PRODUCTS=[
  ('GH-101','Stainless Steel Glass Door Hinge','Glass Door Hardware','Brushed stainless-steel hinge for frameless glass doors; includes matching mounting hardware.',2495,20,1),
@@ -72,13 +73,16 @@ def init_database():
     conn=connect()
     conn.execute('PRAGMA journal_mode=WAL')
     conn.executescript('''
-      CREATE TABLE IF NOT EXISTS products(sku TEXT PRIMARY KEY,slug TEXT UNIQUE NOT NULL,name TEXT NOT NULL,category TEXT NOT NULL,description TEXT NOT NULL,price_cents INTEGER NOT NULL CHECK(price_cents>0),stock INTEGER NOT NULL CHECK(stock>=0),status TEXT NOT NULL CHECK(status IN ('draft','published')),featured INTEGER NOT NULL DEFAULT 0,updated_at TEXT NOT NULL);
+      CREATE TABLE IF NOT EXISTS products(sku TEXT PRIMARY KEY,slug TEXT UNIQUE NOT NULL,name TEXT NOT NULL,category TEXT NOT NULL,description TEXT NOT NULL,price_cents INTEGER NOT NULL CHECK(price_cents>0),stock INTEGER NOT NULL CHECK(stock>=0),status TEXT NOT NULL CHECK(status IN ('draft','published')),featured INTEGER NOT NULL DEFAULT 0,updated_at TEXT NOT NULL,slu_number TEXT NOT NULL DEFAULT '',image_location TEXT NOT NULL DEFAULT '',brand TEXT NOT NULL DEFAULT '',uom TEXT NOT NULL DEFAULT 'Each',warehouse_location TEXT NOT NULL DEFAULT '',bin_location TEXT NOT NULL DEFAULT '',weight TEXT NOT NULL DEFAULT '',dimensions TEXT NOT NULL DEFAULT '',reorder_level TEXT NOT NULL DEFAULT '',cost_price TEXT NOT NULL DEFAULT '');
       CREATE TABLE IF NOT EXISTS images(sku TEXT PRIMARY KEY REFERENCES products(sku) ON DELETE CASCADE,mime TEXT NOT NULL,data BLOB NOT NULL);
       CREATE TABLE IF NOT EXISTS orders(id TEXT PRIMARY KEY,buyer TEXT NOT NULL,city TEXT NOT NULL,status TEXT NOT NULL,created_at TEXT NOT NULL,label_ref TEXT,label_verified INTEGER NOT NULL DEFAULT 0);
       CREATE TABLE IF NOT EXISTS order_lines(order_id TEXT NOT NULL REFERENCES orders(id),sku TEXT NOT NULL,qty INTEGER NOT NULL,unit_cents INTEGER NOT NULL,PRIMARY KEY(order_id,sku));
       CREATE TABLE IF NOT EXISTS alerts(id INTEGER PRIMARY KEY AUTOINCREMENT,order_id TEXT,sku TEXT,message TEXT NOT NULL,created_at TEXT NOT NULL);
       CREATE TABLE IF NOT EXISTS audit(id INTEGER PRIMARY KEY AUTOINCREMENT,time TEXT,action TEXT,detail TEXT);
     ''')
+    existing_cols={r['name'] for r in conn.execute('PRAGMA table_info(products)').fetchall()}
+    for col,decl in [('slu_number',"TEXT NOT NULL DEFAULT ''"),('image_location',"TEXT NOT NULL DEFAULT ''"),('brand',"TEXT NOT NULL DEFAULT ''"),('uom',"TEXT NOT NULL DEFAULT 'Each'"),('warehouse_location',"TEXT NOT NULL DEFAULT ''"),('bin_location',"TEXT NOT NULL DEFAULT ''"),('weight',"TEXT NOT NULL DEFAULT ''"),('dimensions',"TEXT NOT NULL DEFAULT ''"),('reorder_level',"TEXT NOT NULL DEFAULT ''"),('cost_price',"TEXT NOT NULL DEFAULT ''")]:
+        if col not in existing_cols: conn.execute(f'ALTER TABLE products ADD COLUMN {col} {decl}')
     if conn.execute('SELECT COUNT(*) FROM products').fetchone()[0]==0:
         conn.execute('BEGIN IMMEDIATE')
         try:
@@ -160,47 +164,54 @@ def audit_new_order(conn, payload):
 
 
 def build_import_review(conn,payload):
-    rows=read_csv(payload.get('csv_text'))
+    try:
+        rows=parse_import_source(payload)
+    except Exception as exc:
+        raise InputError({'file':str(exc)[:300]})
     images=payload.get('images') or []
-    if not isinstance(images,list) or len(images)>75:
-        raise InputError({'images':'Select no more than 75 images.'})
+    if not isinstance(images,list) or len(images)>500:
+        raise InputError({'images':'Select no more than 500 product images.'})
     imap={}; image_errors=[]
     for f in images:
-        if not isinstance(f,dict):
-            raise InputError({'images':'Invalid image upload format.'})
+        if not isinstance(f,dict): raise InputError({'images':'Invalid image upload format.'})
         filename=str(f.get('filename','')).strip()
-        key=filename.lower()
-        if key in imap:
-            image_errors.append(f'Duplicate image file: {filename}')
+        base=Path(filename).name
+        if not base.lower().endswith('.png'): image_errors.append(f'Only PNG product images are accepted: {base}')
+        key=base.lower()
+        if key in imap: image_errors.append(f'Duplicate image file: {base}')
         imap[key]=f
     result=[]; seen=set()
     for i,row in enumerate(rows,2):
         sku=sku_value(row.get('sku'))
+        slu=str(row.get('slu_number') or row.get('slu') or '').strip()
         action=(row.get('action') or 'create').lower()
         errors={}
-        if sku in seen:
-            errors['sku']='SKU appears more than once in this CSV.'
+        if sku in seen: errors['sku']='SKU appears more than once in this spreadsheet.'
         seen.add(sku)
-        if action not in ('create','update'):
-            errors['action']='Action must be create or update.'
+        if action not in ('create','update'): errors['action']='Action must be create or update.'
         existing_row=conn.execute('SELECT * FROM products WHERE sku=?',(sku,)).fetchone()
         existing=dict(existing_row) if existing_row else None
-        if action=='create' and existing:
-            errors['sku']='SKU already exists. Use action=update to modify it.'
-        if action=='update' and not existing:
-            errors['sku']='SKU not found. Use action=create for new products.'
-        filename=(row.get('image_filename') or (sku+'.png' if action=='create' else '')).strip()
-        image=imap.get(filename.lower()) if filename else None
-        if filename and not image:
-            errors['image']=f'Missing matching image file: {filename}'
-        if image:
-            try: verify_image(filename,image.get('content_b64'),sku)
-            except InputError as exc:errors.update(exc.errors)
-        if action=='create' and not image:
-            errors['image']=errors.get('image','New products require a SKU-matched image.')
-        merged, field_errors=product_fields(row,existing if action=='update' else None,bool(image or (existing if action=='update' else False)))
+        if action=='create' and existing: errors['sku']='SKU already exists. Use action=update to modify it.'
+        if action=='update' and not existing: errors['sku']='SKU not found. Use action=create for new products.'
+        if action=='create' and not slu: errors['slu_number']='SLU number is required for every new product.'
+        filename=(row.get('image_filename') or '').strip()
+        image=None
+        if not filename and slu:
+            matches=[v for k,v in imap.items() if re.search(r'(?<![A-Z0-9])'+re.escape(slu.upper())+r'(?![A-Z0-9])',Path(k).stem.upper())]
+            if len(matches)==1: image=matches[0];filename=Path(image['filename']).name
+            elif len(matches)>1: errors['image']='More than one PNG filename contains this SLU number; specify image_filename.'
+        if filename and not image: image=imap.get(Path(filename).name.lower())
+        if filename and not image: errors['image']=f'Missing PNG image containing SLU {slu or "number"}: {filename}'
+        if image and slu:
+            try: verify_image(Path(filename).name,image.get('content_b64'),sku,slu)
+            except InputError as exc: errors.update(exc.errors)
+        elif image and not slu: errors['slu_number']='SLU number is required to validate the product image.'
+        if action=='create' and not image: errors['image']=errors.get('image','New products require a PNG image whose filename contains the SLU number.')
+        row['slu_number']=slu
+        row['image_location']=row.get('image_location') or (image.get('filename') if image else filename)
+        merged,field_errors=product_fields(row,existing if action=='update' else None,bool(image or (existing if action=='update' else False)))
         errors.update(field_errors)
-        result.append({'row':i,'sku':sku,'name':merged.get('name',''),'action':action,'errors':errors,'record':merged,'image_filename':filename or None})
+        result.append({'row':i,'sku':sku,'slu_number':slu,'name':merged.get('name',''),'action':action,'errors':errors,'record':merged,'image_filename':Path(filename).name if filename else None,'image_location':merged.get('image_location','')})
     overall=not image_errors and all(not r['errors'] for r in result)
     return {'ready':overall,'rows':result,'image_errors':image_errors,'total':len(result),'valid':sum(not bool(r['errors']) for r in result),'invalid':sum(bool(r['errors']) for r in result)},imap
 
@@ -218,14 +229,14 @@ def save_product(conn,data,sku_in_path=None):
     image=data.get('image')
     verified_image=None
     if image:
-        verified_image=verify_image(image.get('filename'),image.get('content_b64'),sku)
+        verified_image=verify_image(image.get('filename'),image.get('content_b64'),sku,data.get('slu_number') or None)
     merged,errs=product_fields(data,existing,bool(image or existing))
     if errs:raise InputError(errs)
     conn.execute('BEGIN IMMEDIATE')
     try:
-        conn.execute('''INSERT INTO products(sku,slug,name,category,description,price_cents,stock,status,featured,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?)
-          ON CONFLICT(sku) DO UPDATE SET slug=excluded.slug,name=excluded.name,category=excluded.category,description=excluded.description,price_cents=excluded.price_cents,stock=excluded.stock,status=excluded.status,featured=excluded.featured,updated_at=excluded.updated_at''',
-          (sku,merged['slug'],merged['name'],merged['category'],merged['description'],merged['price_cents'],merged['stock'],merged['status'],int(merged['featured']),now()))
+        conn.execute('''INSERT INTO products(sku,slug,name,category,description,price_cents,stock,status,featured,updated_at,slu_number,image_location,brand,uom,warehouse_location,bin_location,weight,dimensions,reorder_level,cost_price) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+          ON CONFLICT(sku) DO UPDATE SET slug=excluded.slug,name=excluded.name,category=excluded.category,description=excluded.description,price_cents=excluded.price_cents,stock=excluded.stock,status=excluded.status,featured=excluded.featured,updated_at=excluded.updated_at,slu_number=excluded.slu_number,image_location=excluded.image_location,brand=excluded.brand,uom=excluded.uom,warehouse_location=excluded.warehouse_location,bin_location=excluded.bin_location,weight=excluded.weight,dimensions=excluded.dimensions,reorder_level=excluded.reorder_level,cost_price=excluded.cost_price''',
+          (sku,merged['slug'],merged['name'],merged['category'],merged['description'],merged['price_cents'],merged['stock'],merged['status'],int(merged['featured']),now(),merged.get('slu_number',''),merged.get('image_location',''),merged.get('brand',''),merged.get('uom','Each'),merged.get('warehouse_location',''),merged.get('bin_location',''),merged.get('weight',''),merged.get('dimensions',''),merged.get('reorder_level',''),merged.get('cost_price','')))
         if verified_image:
             conn.execute('INSERT INTO images(sku,mime,data) VALUES(?,?,?) ON CONFLICT(sku) DO UPDATE SET mime=excluded.mime,data=excluded.data',(sku,*verified_image))
         insert_audit(conn,'PRODUCT_'+('UPDATED' if existing else 'CREATED'),f'{sku} · {merged["status"]} · ${merged["price_cents"]/100:.2f}')
@@ -248,10 +259,10 @@ def import_commit(conn,payload):
             m=row['record']
             conn.execute('''INSERT INTO products(sku,slug,name,category,description,price_cents,stock,status,featured,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?)
               ON CONFLICT(sku) DO UPDATE SET slug=excluded.slug,name=excluded.name,category=excluded.category,description=excluded.description,price_cents=excluded.price_cents,stock=excluded.stock,status=excluded.status,featured=excluded.featured,updated_at=excluded.updated_at''',
-              (m['sku'],m['slug'],m['name'],m['category'],m['description'],m['price_cents'],m['stock'],m['status'],int(m['featured']),now()))
+              (m['sku'],m['slug'],m['name'],m['category'],m['description'],m['price_cents'],m['stock'],m['status'],int(m['featured']),now(),m.get('slu_number',''),m.get('image_location',''),m.get('brand',''),m.get('uom','Each'),m.get('warehouse_location',''),m.get('bin_location',''),m.get('weight',''),m.get('dimensions',''),m.get('reorder_level',''),m.get('cost_price','')))
             if row['image_filename']:
                 im=imap[row['image_filename'].lower()]
-                mime,data=verify_image(im['filename'],im['content_b64'],m['sku'])
+                mime,data=verify_image(Path(im['filename']).name,im['content_b64'],m['sku'],m.get('slu_number') or None)
                 conn.execute('INSERT INTO images VALUES(?,?,?) ON CONFLICT(sku) DO UPDATE SET mime=excluded.mime,data=excluded.data',(m['sku'],mime,data))
         insert_audit(conn,'CSV_IMPORT',f'{len(review["rows"])} product(s) created/updated')
         conn.execute('COMMIT')

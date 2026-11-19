@@ -200,7 +200,8 @@ def build_import_review(conn,payload):
         filename=(row.get('image_filename') or '').strip()
         image=None
         if not filename and slu:
-            matches=[v for k,v in imap.items() if re.search(r'(?<![A-Z0-9])'+re.escape(slu.upper())+r'(?![A-Z0-9])',Path(k).stem.upper())]
+            pattern=r'(?<!\\d)'+re.escape(slu.upper())+r'(?!\\d)' if slu.isdigit() else re.escape(slu.upper())
+            matches=[v for k,v in imap.items() if re.search(pattern,Path(k).stem.upper())]
             if len(matches)==1: image=matches[0];filename=Path(image['filename']).name
             elif len(matches)>1: errors['image']='More than one PNG filename contains this SLU number; specify image_filename.'
         if filename and not image: image=imap.get(Path(filename).name.lower())

@@ -500,6 +500,12 @@ class Handler(BaseHTTPRequestHandler):
         host=re.sub('[^A-Za-z0-9.:_-]','',self.headers.get('Host','localhost:10000'))
         return ('https' if self.headers.get('X-Forwarded-Proto')=='https' else 'http')+'://'+host
     def do_GET(self):self.handle_request('GET')
+    def do_HEAD(self):
+        self.send_response(200 if urlparse(self.path).path in ('/','/health') else 404)
+        self.headers_basic()
+        self.send_header('Content-Type','text/html; charset=utf-8')
+        self.send_header('Content-Length','0')
+        self.end_headers()
     def do_POST(self):self.handle_request('POST')
     def do_PUT(self):self.handle_request('PUT')
 

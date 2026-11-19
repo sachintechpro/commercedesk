@@ -132,6 +132,10 @@ def product_fields(raw, existing=None, image_present=False):
         value = str(value or '').strip()
         if len(value) > limit: errors[field] = f'{field.replace("_", " ").title()} exceeds {limit} characters.'
         merged[field] = value
+    if creating and not merged.get('slu_number'):
+        errors['slu_number'] = 'SLU number is required for every new product.'
+    if creating and not merged.get('image_location'):
+        errors['image_location'] = 'Image location is required for every new product.'
     merged['slug'] = slug_for(merged.get('name',''), sku)
     if creating and not image_present:
         errors['image'] = 'A primary product image is required.'

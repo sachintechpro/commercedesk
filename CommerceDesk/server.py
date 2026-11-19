@@ -83,6 +83,7 @@ def init_database():
     existing_cols={r['name'] for r in conn.execute('PRAGMA table_info(products)').fetchall()}
     for col,decl in [('slu_number',"TEXT NOT NULL DEFAULT ''"),('image_location',"TEXT NOT NULL DEFAULT ''"),('brand',"TEXT NOT NULL DEFAULT ''"),('uom',"TEXT NOT NULL DEFAULT 'Each'"),('warehouse_location',"TEXT NOT NULL DEFAULT ''"),('bin_location',"TEXT NOT NULL DEFAULT ''"),('weight',"TEXT NOT NULL DEFAULT ''"),('dimensions',"TEXT NOT NULL DEFAULT ''"),('reorder_level',"TEXT NOT NULL DEFAULT ''"),('cost_price',"TEXT NOT NULL DEFAULT ''")]:
         if col not in existing_cols: conn.execute(f'ALTER TABLE products ADD COLUMN {col} {decl}')
+    conn.execute("UPDATE products SET slu_number=substr(sku,instr(sku,'-')+1), image_location='samples/images/'||sku||'.png' WHERE slu_number='' OR image_location=''")
     if conn.execute('SELECT COUNT(*) FROM products').fetchone()[0]==0:
         conn.execute('BEGIN IMMEDIATE')
         try:

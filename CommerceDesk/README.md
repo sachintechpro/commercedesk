@@ -36,7 +36,7 @@ Each new product row should include:
 - Image location
 - Optional brand, unit of measure, warehouse, bin/shelf, shipping weight, dimensions, reorder level and cost price
 
-Every new product requires a PNG image. The image filename must contain the exact SLU number as a separate token, for example glass-front_782341.png. The importer previews each row and image match, blocks the entire batch if any row fails validation, and commits valid products in a single database transaction.
+Every new product requires a PNG image. The image filename must contain the exact SLU number in the filename, without being part of a longer number, for example glass-front_782341.png. The importer previews each row and image match, blocks the entire batch if any row fails validation, and commits valid products in a single database transaction.
 
 The complete example template is available at samples/products-import-template.csv.
 

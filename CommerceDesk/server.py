@@ -88,7 +88,7 @@ def init_database():
         try:
             from model import slug_for
             for sku,name,cat,desc,price,stock,featured in SAMPLE_PRODUCTS:
-                conn.execute('INSERT INTO products VALUES(?,?,?,?,?,?,?,?,?,?)',(sku,slug_for(name,sku),name,cat,desc,price,stock,'published',featured,now()))
+                conn.execute('INSERT INTO products(sku,slug,name,category,description,price_cents,stock,status,featured,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?)',(sku,slug_for(name,sku),name,cat,desc,price,stock,'published',featured,now()))
                 img=ROOT/'samples'/'images'/f'{sku}.png'
                 if img.exists():
                     conn.execute('INSERT INTO images VALUES(?,?,?)',(sku,'image/png',img.read_bytes()))
@@ -257,8 +257,8 @@ def import_commit(conn,payload):
             raise InputError({'import':'Review contains errors. Nothing was published.'})
         for row in review['rows']:
             m=row['record']
-            conn.execute('''INSERT INTO products(sku,slug,name,category,description,price_cents,stock,status,featured,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?)
-              ON CONFLICT(sku) DO UPDATE SET slug=excluded.slug,name=excluded.name,category=excluded.category,description=excluded.description,price_cents=excluded.price_cents,stock=excluded.stock,status=excluded.status,featured=excluded.featured,updated_at=excluded.updated_at''',
+            conn.execute('''INSERT INTO products(sku,slug,name,category,description,price_cents,stock,status,featured,updated_at,slu_number,image_location,brand,uom,warehouse_location,bin_location,weight,dimensions,reorder_level,cost_price) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+              ON CONFLICT(sku) DO UPDATE SET slug=excluded.slug,name=excluded.name,category=excluded.category,description=excluded.description,price_cents=excluded.price_cents,stock=excluded.stock,status=excluded.status,featured=excluded.featured,updated_at=excluded.updated_at,slu_number=excluded.slu_number,image_location=excluded.image_location,brand=excluded.brand,uom=excluded.uom,warehouse_location=excluded.warehouse_location,bin_location=excluded.bin_location,weight=excluded.weight,dimensions=excluded.dimensions,reorder_level=excluded.reorder_level,cost_price=excluded.cost_price''',
               (m['sku'],m['slug'],m['name'],m['category'],m['description'],m['price_cents'],m['stock'],m['status'],int(m['featured']),now(),m.get('slu_number',''),m.get('image_location',''),m.get('brand',''),m.get('uom','Each'),m.get('warehouse_location',''),m.get('bin_location',''),m.get('weight',''),m.get('dimensions',''),m.get('reorder_level',''),m.get('cost_price','')))
             if row['image_filename']:
                 im=imap[row['image_filename'].lower()]

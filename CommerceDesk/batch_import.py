@@ -15,7 +15,8 @@ NS = {'m':'http://schemas.openxmlformats.org/spreadsheetml/2006/main',
 
 def _clean_rows(rows):
     if not rows: raise ValueError('The selected spreadsheet contains no rows.')
-    headers=[str(x or '').strip().lower().replace(' ','_') for x in rows[0]]
+    aliases={'product_name':'name','item_name':'name','selling_price':'price','unit_price':'price','quantity':'stock','stock_on_hand':'stock','slu':'slu_number','image_path':'image_location','image_url':'image_location','image':'image_filename','manufacturer':'brand','unit_of_measure':'uom','warehouse':'warehouse_location','bin':'bin_location','reorder_point':'reorder_level','cost':'cost_price'}
+    headers=[aliases.get(str(x or '').strip().lower().replace(' ','_'),str(x or '').strip().lower().replace(' ','_')) for x in rows[0]]
     if 'sku' not in headers: raise ValueError('The spreadsheet must include a SKU column.')
     if len(headers)!=len(set(headers)): raise ValueError('The spreadsheet contains duplicate column headings.')
     result=[]
@@ -67,7 +68,7 @@ def _google_csv_url(url):
         raise ValueError('Use a Google Sheets HTTPS URL or upload a spreadsheet file.')
     match=re.search(r'/spreadsheets/d/([A-Za-z0-9_-]+)',parsed.path)
     if not match: raise ValueError('Google Sheets URL is not recognized.')
-    gid=parse_qs(parsed.query).get('gid',['0'])[0]
+    gid=parse_qs(parsed.query).get('gid',[parse_qs(parsed.fragment).get('gid',['0'])[0]])[0]
     return 'https://docs.google.com/spreadsheets/d/'+match.group(1)+'/export?'+urlencode({'format':'csv','gid':gid})
 
 def parse_import_source(payload):

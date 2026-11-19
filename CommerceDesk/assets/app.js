@@ -102,6 +102,75 @@ async function home(){
         </div>
       </section>
 
+      <section class="owner-guide" id="owner-guide">
+        <div class="owner-guide-heading">
+          <span class="marketing-eyebrow">A CLEAR PATH FROM FIRST CONVERSATION TO HANDOVER</span>
+          <h2>What happens next?</h2>
+          <p>A straightforward process to understand your operation, shape the right solution and agree on the work before development begins.</p>
+        </div>
+
+        <div class="owner-journey">
+          <article class="owner-journey-step"><span class="owner-step-number">01</span><div><h3>Discovery</h3><p>We learn how your business works today: customers, products, orders, people and day-to-day challenges.</p><span class="owner-outcome"><b>You'll get:</b> A shared understanding of your needs and priorities.</span></div></article>
+          <article class="owner-journey-step"><span class="owner-step-number">02</span><div><h3>Business &amp; technical assessment</h3><p>We review workflows, existing systems, data, integrations and the practical requirements for a solution.</p><span class="owner-outcome"><b>You'll get:</b> Recommended scope, solution approach and a staged cost breakdown.</span></div></article>
+          <article class="owner-journey-step"><span class="owner-step-number">03</span><div><h3>Solution proposal</h3><p>We lay out the proposed features, deliverables, implementation stages, estimated timeline and costs for your review.</p><span class="owner-outcome"><b>You'll get:</b> A proposal to review and approve before development is authorized.</span></div></article>
+          <article class="owner-journey-step"><span class="owner-step-number">04</span><div><h3>Prototype &amp; development</h3><p>Once the scope is agreed, we demonstrate the agreed workflows and build the solution around your operation.</p><span class="owner-outcome"><b>You'll get:</b> Working software developed against the agreed scope.</span></div></article>
+          <article class="owner-journey-step"><span class="owner-step-number">05</span><div><h3>Testing &amp; deployment</h3><p>We validate the application, prepare the deployment and hand over the completed solution.</p><span class="owner-outcome"><b>You'll get:</b> A tested application and a structured handover.</span></div></article>
+        </div>
+
+        <div class="owner-discovery">
+          <div class="owner-subheading"><span class="marketing-eyebrow">LET'S UNDERSTAND YOUR BUSINESS</span><h2>What will we discuss?</h2><p>These are the kinds of questions that help us understand how work moves through your warehouse. You don't need to prepare formal answers in advance.</p></div>
+          <div class="owner-question-grid">
+            <article class="owner-question"><span>01</span><div><h3>How do customers place orders?</h3><p>Website, phone, email, sales representatives or walk-ins?</p></div></article>
+            <article class="owner-question"><span>02</span><div><h3>Who do you sell to?</h3><p>Businesses, consumers or a combination of both?</p></div></article>
+            <article class="owner-question"><span>03</span><div><h3>How large is your product catalog?</h3><p>Roughly how many products or SKUs do you manage?</p></div></article>
+            <article class="owner-question"><span>04</span><div><h3>How do you track inventory?</h3><p>ERP, inventory software, spreadsheets or manual updates?</p></div></article>
+            <article class="owner-question"><span>05</span><div><h3>Who processes incoming orders?</h3><p>Who checks details, availability, pricing and order status?</p></div></article>
+            <article class="owner-question"><span>06</span><div><h3>How does the warehouse receive instructions?</h3><p>How are picking, packing and dispatch tasks communicated?</p></div></article>
+            <article class="owner-question"><span>07</span><div><h3>What systems do you already use?</h3><p>ERP, accounting, inventory, shipping or other business applications?</p></div></article>
+            <article class="owner-question"><span>08</span><div><h3>Where does your team spend the most time?</h3><p>Which manual tasks, delays or handoffs create the most friction?</p></div></article>
+          </div>
+        </div>
+
+        <div class="owner-faq">
+          <div class="owner-subheading"><span class="marketing-eyebrow">GOOD QUESTIONS TO ASK</span><h2>Common questions</h2><p>Every business is different. Here are a few things owners often want to clarify.</p></div>
+          <div class="owner-faq-list">
+            <details class="owner-faq-item"><summary>We already have a website. Can you still help?</summary><div><p>Yes. We can assess whether your existing website can be connected to internal order processing, inventory and warehouse workflows. Replacing the website is not automatically necessary.</p></div></details>
+            <details class="owner-faq-item"><summary>We currently manage things in spreadsheets.</summary><div><p>We can explore where connected workflows could reduce repeated data entry, improve visibility and make day-to-day tasks easier to manage.</p></div></details>
+            <details class="owner-faq-item"><summary>We already use an ERP or inventory system.</summary><div><p>We don't necessarily replace it. The assessment can identify whether a customer-facing ordering layer, workflow improvement or suitable integration would add value.</p></div></details>
+            <details class="owner-faq-item"><summary>We are a small business. Is this suitable for us?</summary><div><p>The solution can be scoped around your current operation, priorities and budget. The right starting point may be a focused workflow rather than a large system.</p></div></details>
+            <details class="owner-faq-item"><summary>How much will it cost?</summary><div><p>Cost depends on the products, workflows, systems, integrations and requirements involved. After discovery, and as part of the assessment, we provide a stage-by-stage cost breakdown with the proposed scope and deliverables.</p></div></details>
+            <details class="owner-faq-item"><summary>How long will implementation take?</summary><div><p>Timing depends on scope and complexity. We provide an estimate during assessment. Any example ranges shown here are indicative only, not guaranteed commitments.</p></div></details>
+            <details class="owner-faq-item"><summary>Do we have to commit to development after discovery?</summary><div><p>No. Discovery and assessment help clarify the need and proposed approach. You can review the scope, costs and proposal before deciding whether to proceed with development.</p></div></details>
+          </div>
+        </div>
+
+        <div class="owner-timeline">
+          <div class="owner-subheading"><span class="marketing-eyebrow">PLANNING THE WORK</span><h2>Indicative project stages</h2><p>These ranges provide an initial sense of the process. The actual plan is shaped around your requirements and confirmed during assessment.</p></div>
+          <div class="owner-timeline-grid">
+            <div class="owner-timeline-item"><span>01</span><b>Initial contact</b><strong>1–5 days</strong><small>Understand the initial need and arrange discovery.</small></div>
+            <div class="owner-timeline-item"><span>02</span><b>Discovery</b><strong>2–5 days</strong><small>Understand business operations and priorities.</small></div>
+            <div class="owner-timeline-item"><span>03</span><b>Assessment</b><strong>3–5 days</strong><small>Define scope, solution approach and estimate.</small></div>
+            <div class="owner-timeline-item"><span>04</span><b>Prototype</b><strong>1–2 weeks</strong><small>Demonstrate agreed workflows and experience.</small></div>
+            <div class="owner-timeline-item"><span>05</span><b>Development</b><strong>2–6 weeks</strong><small>Build the agreed customized solution.</small></div>
+            <div class="owner-timeline-item"><span>06</span><b>Testing &amp; deployment</b><strong>1–2 weeks</strong><small>Validate, deploy and hand over the application.</small></div>
+          </div>
+          <p class="owner-timeline-note">All durations are indicative planning ranges, not guaranteed commitments. Larger ERP integrations, inventory migration and warehouse-specific workflows may require additional time.</p>
+        </div>
+
+        <div class="owner-cost">
+          <div class="owner-cost-copy"><span class="marketing-eyebrow">NO GUESSWORK BEFORE YOU COMMIT</span><h2>Know what each stage involves — and what it costs.</h2><p>We don't quote a one-size-fits-all price before understanding your operation. After discovery and during assessment, we'll prepare a stage-by-stage cost breakdown based on the proposed scope.</p></div>
+          <div class="owner-cost-list">
+            <div><span>01</span><b>Discovery &amp; assessment</b><small>Business understanding and solution definition</small></div>
+            <div><span>02</span><b>Experience &amp; prototype</b><small>Agreed user journeys and workflow demonstration</small></div>
+            <div><span>03</span><b>Application development</b><small>Build of the approved features and workflows</small></div>
+            <div><span>04</span><b>Integrations &amp; data work</b><small>Applicable system connections and data migration</small></div>
+            <div><span>05</span><b>Testing &amp; deployment</b><small>Validation, release and handover</small></div>
+            <div><span>06</span><b>Optional enhancements</b><small>Additional scope or support, if required</small></div>
+          </div>
+          <p class="owner-cost-foot">You'll be able to review the proposed stages, deliverables, estimated timeline and costs before authorizing development.</p>
+        </div>
+      </section>
+
       <section class="marketing-final-cta">
         <div><span class="marketing-eyebrow">LET'S TALK ABOUT YOUR OPERATION</span><h2>What could work better<br>in your warehouse?</h2><p>Tell us how orders move through your business. We'll take a look at your current setup and arrange a discovery conversation.</p></div>
         <div class="marketing-final-actions"><a class="btn marketing-btn-light marketing-btn-large" href="https://sachintechpro.github.io/?project=commercedesk#contact" target="_blank" rel="noopener noreferrer">Request a discovery meeting <span>↗</span></a><a href="/shop" class="marketing-final-demo">Prefer to explore first? View the demo →</a><small>Share your preferred meeting times and address through our existing contact form. We'll confirm the meeting directly.</small></div>

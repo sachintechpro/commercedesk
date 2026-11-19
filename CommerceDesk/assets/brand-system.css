@@ -157,3 +157,32 @@ h1{font-weight:780;letter-spacing:-.045em}
 @media(max-width:900px){.admin-layout{grid-template-columns:1fr}.admin-nav{position:static;min-height:0;display:flex;flex-direction:row;align-items:center;flex-wrap:wrap;gap:3px}.workspace-brand{width:100%;padding-bottom:14px}.workspace-label{width:100%;padding:12px 8px 4px}.workspace-nav-spacer{display:none}.workspace-demo-note{display:none}.admin-nav a.workspace-link{width:auto}.admin-nav button#admin-logout{width:auto;margin-left:auto}.admin-panel{padding-top:8px}}
 @media(max-width:780px){.shell{width:calc(100% - 32px)}.site-header-top{gap:14px}.admin-panel h1{font-size:28px}.stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.page-main{padding-top:23px}.admin-nav a.workspace-link{font-size:10px;padding:9px 8px}.workspace-brand{width:100%}.admin-nav button#admin-logout{font-size:10px;padding:9px}.admin-panel h1{font-size:25px}.stat{padding:17px}.stat .number{font-size:29px}.panel{padding:17px}.login-card{padding:27px 22px}.marketing-hero h1{letter-spacing:-1.8px}}
+
+/* Accessibility contrast fixes — buttons and dark home-page sections */
+.btn-primary,
+.btn-primary:visited,
+.btn-dark,
+.btn-dark:visited,
+.marketing-btn-light,
+.marketing-btn-light:visited {
+  color: #fff !important;
+}
+.btn-primary:hover,
+.btn-dark:hover,
+.marketing-btn-light:hover {
+  color: #fff !important;
+}
+.marketing-demo-band,
+.marketing-demo-band h2,
+.marketing-demo-band h3,
+.marketing-demo-band h4,
+.marketing-demo-band .marketing-demo-copy h2,
+.marketing-demo-band .marketing-demo-panel h3 {
+  color: #fff;
+}
+.marketing-demo-band .marketing-demo-copy .marketing-eyebrow {
+  color: #f8d77e;
+}
+.marketing-demo-band .marketing-demo-panel p {
+  color: #d3deeb;
+}

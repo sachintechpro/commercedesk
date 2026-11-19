@@ -64,7 +64,7 @@ class ApiJourneyTests(unittest.TestCase):
         self.assertFalse(any(x['sku']=='GS-999' for x in catalog['products']))
     def test_06_upload_product_with_matched_image(self):
         csrf=self.login();image=base64.b64encode((ROOT/'samples/images/GH-205.png').read_bytes()).decode()
-        p={'sku':'GH-205','name':'New hinge test','category':'Glass Door Hardware','description':'A fictional new test item.','price':'25.75','stock':4,'status':'published','image':{'filename':'GH-205.png','content_b64':image}}
+        p={'sku':'GH-205','name':'New hinge test','category':'Glass Door Hardware','description':'A fictional new test item.','price':'25.75','stock':4,'status':'published','slu_number':'205','image_location':'samples/images/GH-205.png','image':{'filename':'GH-205.png','content_b64':image}}
         code,r=self.req('POST','/api/admin/products',p,csrf);self.assertEqual(code,201,r)
         code,r=self.req('GET','/api/product/'+r['product']['slug']);self.assertEqual(code,200);self.assertEqual(r['product']['price_cents'],2575)
         code,img=self.req('GET','/api/images/GH-205');self.assertEqual(code,200)
@@ -80,6 +80,7 @@ class ApiJourneyTests(unittest.TestCase):
         code,r=self.req('POST','/api/admin/import/preview',payload,csrf);self.assertEqual(code,200,r);self.assertTrue(r['review']['ready'],r)
         code,r=self.req('POST','/api/admin/import',payload,csrf);self.assertEqual(code,200,r);self.assertEqual(r['result']['created'],2)
         code,r=self.req('GET','/api/catalog');self.assertTrue(any(x['sku']=='GS-305' for x in r['products']))
+        gs=next(x for x in r['products'] if x['sku']=='GS-305');self.assertEqual(gs['slu_number'],'305');self.assertEqual(gs['warehouse_location'],'Main Warehouse');self.assertTrue(gs['image_location'].endswith('GS-305.png'))
     def test_09_ready_order_and_label(self):
         csrf=self.login()
         code,r=self.req('POST','/api/orders',{'buyer':'Sample Client','city':'Fictional City, CA','items':[{'sku':'GH-101','qty':1}]})
@@ -108,7 +109,7 @@ class ApiJourneyTests(unittest.TestCase):
         image=base64.b64encode((ROOT/'samples/images/GS-305.png').read_bytes()).decode()
         p={'sku':'GS-305','name':'Draft seal','category':'Seals & Gaskets','description':'Unpublished draft product.','price':'8.99','stock':'6','status':'draft','image':{'filename':'GS-305.png','content_b64':image}}
         # GS-305 was already created in test_08; use a unique SKU and matching filename created for it.
-        p['sku']='GS-306';p['image']['filename']='GS-306.png'
+        p['sku']='GS-306';p['slu_number']='306';p['image_location']='samples/images/GS-306.png';p['image']['filename']='GS-306.png'
         code,r=self.req('POST','/api/admin/products',p,csrf);self.assertEqual(code,201,r)
         code,r=self.req('GET','/api/product/'+r['product']['slug']);self.assertEqual(code,404)
         code,r=self.req('POST','/api/admin/logout',{});self.assertEqual(code,200)
@@ -130,7 +131,10 @@ class ApiJourneyTests(unittest.TestCase):
         self.assertEqual(code,201,r);self.assertEqual(r['order']['status'],'hold')
         code,after=self.req('GET','/api/admin/dashboard')
         self.assertEqual(next(p['stock'] for p in after['products'] if p['sku']=='GH-102'),original)
-    def test_15_reset_restore(self):
+    def test_15_public_howto_about_and_integration_routes(self):
+        for path in ['/how-to','/about','/admin/integrations']:
+            code,body=self.req('GET',path);self.assertEqual(code,200);self.assertIn('id="app"',body)
+    def test_16_reset_restore(self):
         csrf=self.login()
         code,r=self.req('POST','/api/admin/reset',{'confirmation':'WRONG'},csrf);self.assertEqual(code,422)
         code,r=self.req('POST','/api/admin/reset',{'confirmation':'RESET DEMO'},csrf);self.assertEqual(code,200,r)

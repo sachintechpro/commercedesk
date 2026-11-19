@@ -51,7 +51,7 @@ def slug_for(name, sku):
     return re.sub(r'[^a-z0-9]+', '-', str(name).lower()).strip('-')[:56] + '-' + sku.lower()
 
 
-def verify_image(filename, data_b64, sku):
+def verify_image(filename, data_b64, sku, slu_number=None):
     errors = {}
     filename = str(filename or '').strip()
     if '/' in filename or '\\' in filename or '\x00' in filename:
@@ -59,7 +59,12 @@ def verify_image(filename, data_b64, sku):
         raise InputError(errors)
     dot = filename.rfind('.')
     stem, ext = filename[:dot].upper() if dot > 0 else '', filename[dot:].lower() if dot > 0 else ''
-    if stem != sku or ext not in IMAGE_TYPES:
+    if slu_number:
+        slu = str(slu_number).strip()
+        if ext != '.png' or not re.search(r'(?<![A-Z0-9])'+re.escape(slu)+r'(?![A-Z0-9])', stem):
+            errors['image'] = f'PNG filename must contain the exact SLU number {slu} as a separate token.'
+            raise InputError(errors)
+    elif stem != sku or ext not in IMAGE_TYPES:
         errors['image'] = f'Image filename must match SKU {sku} (for example {sku}.png).'
         raise InputError(errors)
     try:
@@ -122,6 +127,11 @@ def product_fields(raw, existing=None, image_present=False):
     if featured is None or str(featured).strip() == '':
         featured = (existing or {}).get('featured', False)
     merged['featured'] = str(featured).strip().lower() in ('true','1','yes','on') if not isinstance(featured, bool) else featured
+    for field, limit in [('slu_number',60),('image_location',500),('brand',100),('uom',30),('warehouse_location',120),('bin_location',120),('weight',40),('dimensions',80),('reorder_level',20),('cost_price',20)]:
+        value = raw.get(field, (existing or {}).get(field, ''))
+        value = str(value or '').strip()
+        if len(value) > limit: errors[field] = f'{field.replace("_", " ").title()} exceeds {limit} characters.'
+        merged[field] = value
     merged['slug'] = slug_for(merged.get('name',''), sku)
     if creating and not image_present:
         errors['image'] = 'A primary product image is required.'

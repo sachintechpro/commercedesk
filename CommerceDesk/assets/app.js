@@ -31,64 +31,85 @@ function breadcrumbs(...parts){return `<div class="breadcrumb"><a href="/">Home<
 async function catalog(){return (await api('/api/catalog')).products}
 const categoryTiles=()=>[['Glass Door Hardware','◈','Hinges, pulls and clamps'],['Seals & Gaskets','≋','Door sweeps and glazing seals'],['Installation Tools','⌁','Handling and installation tools'],['Glazing Supplies','▤','Channels and mounting essentials']].map(([name,ic,description])=>`<a class="category-tile" href="/category/${categorySlug(name)}"><div class="cat-icon">${ic}</div><h3>${name}</h3><p>${description} →</p></a>`).join('');
 async function home(){
+  document.body.classList.add('marketing-home');
   app.innerHTML=`
-    <section class="warehouse-hero">
-      <div class="warehouse-hero-copy">
-        <span class="eyebrow">CommerceDesk · Warehouse & distribution workflows</span>
-        <h1>Make every warehouse order easier to manage.</h1>
-        <p>Bring customer ordering and your team's product, inventory and order-processing work into one connected experience — shaped around the way your business operates.</p>
-        <div class="row wrap">
-          <a class="btn btn-primary" href="/shop">Explore the storefront demo →</a>
-          <a class="btn" href="https://sachintechpro.github.io/?project=commercedesk#contact" target="_blank" rel="noopener noreferrer">Book a discovery meeting</a>
+    <div class="marketing-shell">
+      <nav class="marketing-nav" aria-label="Main navigation">
+        <a class="marketing-brand" href="/"><span class="marketing-brand-mark">C</span><span>CommerceDesk<small>OPERATIONS, CONNECTED.</small></span></a>
+        <div class="marketing-nav-links"><a href="#how-it-works">How it works</a><a href="#capabilities">What we build</a><a href="#approach">Our approach</a></div>
+        <div class="marketing-nav-actions"><a class="marketing-nav-demo" href="/shop">View demo</a><a class="btn btn-primary" href="https://sachintechpro.github.io/?project=commercedesk#contact" target="_blank" rel="noopener noreferrer">Talk to us <span>↗</span></a></div>
+      </nav>
+
+      <section class="marketing-hero">
+        <div class="marketing-hero-copy">
+          <div class="marketing-kicker"><span></span> CUSTOM DIGITAL WORKFLOWS FOR WAREHOUSES</div>
+          <h1>Your warehouse runs on hard work. Your systems should make it <em>easier.</em></h1>
+          <p>Connect the way customers order with the way your team manages products, inventory and fulfillment — through software designed around your operation.</p>
+          <div class="marketing-hero-actions">
+            <a class="btn btn-primary marketing-btn-large" href="https://sachintechpro.github.io/?project=commercedesk#contact" target="_blank" rel="noopener noreferrer">Schedule a discovery call <span>↗</span></a>
+            <a class="marketing-secondary-cta" href="/shop">Explore the interactive demo <span>→</span></a>
+          </div>
+          <div class="marketing-proofline"><span>✓</span> Tailored to your workflows <i></i><span>✓</span> Built for your team <i></i><span>✓</span> Your systems, your solution</div>
         </div>
-        <p class="warehouse-note">A demonstration of what can be built for your operation — not an off-the-shelf software subscription.</p>
-      </div>
-      <div class="warehouse-hero-visual">
-        <div class="warehouse-visual-card">
-          <div class="warehouse-visual-top"><span>ORDER WORKSPACE</span><span class="warehouse-live-dot">● DEMO</span></div>
-          <div class="warehouse-order"><span class="warehouse-icon">▦</span><div><b>Customer storefront</b><small>Products · Cart · Order submission</small></div><span class="warehouse-check">✓</span></div>
-          <div class="warehouse-flow-line"></div>
-          <div class="warehouse-order"><span class="warehouse-icon">▤</span><div><b>Order processing</b><small>Order review · Stock checks · Exceptions</small></div><span class="warehouse-check">✓</span></div>
-          <div class="warehouse-flow-line"></div>
-          <div class="warehouse-order"><span class="warehouse-icon">▣</span><div><b>Warehouse handoff</b><small>Pick/pack workflow · Dispatch status</small></div><span class="warehouse-check">✓</span></div>
-          <div class="warehouse-visual-foot">One connected workflow · Your business rules</div>
+        <div class="marketing-hero-art" aria-label="Illustration of a connected warehouse order workflow">
+          <div class="marketing-art-glow"></div>
+          <div class="marketing-dashboard">
+            <div class="marketing-dash-top"><div><span class="marketing-dash-dot"></span><b>ORDER OPERATIONS</b></div><span class="marketing-demo-tag">INTERACTIVE DEMO</span></div>
+            <div class="marketing-dash-title">A connected order journey <span>↗</span></div>
+            <div class="marketing-dash-flow">
+              <div class="marketing-flow-step"><span class="marketing-flow-icon">▤</span><div><b>Customer order</b><small>Browse · Select · Submit</small></div><span class="marketing-flow-state">01</span></div>
+              <div class="marketing-flow-connector"></div>
+              <div class="marketing-flow-step"><span class="marketing-flow-icon">▦</span><div><b>Order desk</b><small>Review · Validate · Prioritize</small></div><span class="marketing-flow-state">02</span></div>
+              <div class="marketing-flow-connector"></div>
+              <div class="marketing-flow-step"><span class="marketing-flow-icon">▣</span><div><b>Warehouse handoff</b><small>Prepare · Pack · Dispatch</small></div><span class="marketing-flow-state">03</span></div>
+            </div>
+            <div class="marketing-dash-footer"><span>ONE WORKFLOW</span><span>BUILT AROUND YOUR BUSINESS</span></div>
+          </div>
+          <div class="marketing-floating-note"><span>↗</span><div><b>Less manual coordination</b><small>More visibility across the work</small></div></div>
+          <div class="marketing-art-caption">A concept view of a tailored operations workspace</div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="warehouse-section">
-      <div class="warehouse-section-heading"><span class="eyebrow">The day-to-day challenge</span><h2>When orders move across disconnected tools, work gets harder.</h2><p>Many warehouse and wholesale teams still coordinate important steps through a mix of calls, emails, spreadsheets and separate systems.</p></div>
-      <div class="warehouse-problem-grid">
-        <article class="warehouse-info-card"><span>01</span><h3>Orders arrive in different places</h3><p>Customer requests come through calls, email, forms or sales teams — creating manual re-entry and follow-up.</p></article>
-        <article class="warehouse-info-card"><span>02</span><h3>Product and stock details are scattered</h3><p>Teams spend time checking SKUs, pricing and availability across spreadsheets or disconnected applications.</p></article>
-        <article class="warehouse-info-card"><span>03</span><h3>Processing lacks a shared view</h3><p>It can be difficult to see what is ready, what is waiting and which exceptions need attention.</p></article>
-      </div>
-    </section>
+      <section class="marketing-audience-strip">
+        <span>BUILT FOR BUSINESSES THAT MOVE PRODUCTS</span>
+        <div><b>Wholesale distributors</b><i></i><b>Building materials</b><i></i><b>Industrial supplies</b><i></i><b>Parts & equipment</b></div>
+      </section>
 
-    <section class="warehouse-demo-section">
-      <div class="warehouse-section-heading"><span class="eyebrow">See the workflow</span><h2>From customer order to warehouse action.</h2><p>Use the live demonstration to experience both sides of a connected order workflow.</p></div>
-      <div class="warehouse-demo-grid">
-        <article class="warehouse-demo-card"><div class="warehouse-demo-number">01 · CUSTOMER EXPERIENCE</div><h3>Online storefront</h3><p>Browse a sample product catalog, search by product or SKU, add items to a cart and submit a demonstration order.</p><a href="/shop" class="warehouse-text-link">Explore customer storefront →</a></article>
-        <article class="warehouse-demo-card"><div class="warehouse-demo-number">02 · INTERNAL OPERATIONS</div><h3>Product and order management</h3><p>Review products, maintain catalog data, check inventory, process sample orders and see how exceptions are handled.</p><a href="/admin" class="warehouse-text-link">Explore admin workspace →</a><p class="warehouse-demo-foot">Use the demo credentials shown on the admin sign-in page.</p></article>
-      </div>
-      <div class="warehouse-demo-disclaimer">This is a working demonstration with sample data. Payment processing, carrier services, live tracking and external system connections are not active.</div>
-    </section>
+      <section class="marketing-section" id="capabilities">
+        <div class="marketing-section-intro"><div><span class="marketing-eyebrow">WHERE THE WORK GETS STUCK</span><h2>Bring the moving parts<br>together.</h2></div><p>When orders, product information and warehouse activity live in separate places, your team becomes the integration layer. We help reduce that friction.</p></div>
+        <div class="marketing-capability-grid">
+          <article class="marketing-capability"><span class="marketing-card-index">01 / ORDER INTAKE</span><div class="marketing-cap-icon">↗</div><h3>Make ordering simpler</h3><p>Give customers a clear online way to find products, build orders and submit requests — instead of relying on calls and email alone.</p></article>
+          <article class="marketing-capability"><span class="marketing-card-index">02 / PRODUCT & STOCK</span><div class="marketing-cap-icon">▦</div><h3>Keep product details organized</h3><p>Bring catalog, SKU, pricing and stock information into workflows your team can maintain and use.</p></article>
+          <article class="marketing-capability"><span class="marketing-card-index">03 / ORDER OPERATIONS</span><div class="marketing-cap-icon">⇢</div><h3>See what needs attention</h3><p>Support order review, processing steps, handoffs and exception visibility with a shared operational view.</p></article>
+        </div>
+      </section>
 
-    <section class="warehouse-section">
-      <div class="warehouse-section-heading"><span class="eyebrow">Designed around your operation</span><h2>Your workflows first. The software follows.</h2><p>We start with how your business actually works, then shape the solution around your people, processes and existing systems.</p></div>
-      <div class="warehouse-approach-grid">
-        <div><b>Understand</b><p>Review your current order intake, catalog, inventory, warehouse and dispatch processes.</p></div>
-        <div><b>Assess</b><p>Identify handoffs, bottlenecks, system dependencies and practical automation opportunities.</p></div>
-        <div><b>Plan</b><p>Prepare a proposed solution, scope, delivery roadmap, timeline and commercial proposal.</p></div>
-        <div><b>Build & hand over</b><p>After agreement, develop, test, deploy and hand over the tailored solution to your team.</p></div>
-      </div>
-    </section>
+      <section class="marketing-demo-band" id="how-it-works">
+        <div class="marketing-demo-copy"><span class="marketing-eyebrow">TAKE A LOOK INSIDE</span><h2>See both sides<br>of the operation.</h2><p>This CommerceDesk demonstration shows how a customer-facing storefront can connect with an internal product and order workspace.</p><a class="btn btn-primary marketing-btn-large" href="/shop">Launch the storefront demo <span>→</span></a><small>Sample catalog and orders · No live payment or carrier integrations</small></div>
+        <div class="marketing-demo-panels">
+          <a class="marketing-demo-panel" href="/shop"><div class="marketing-demo-panel-top"><span>01 — CUSTOMER EXPERIENCE</span><span>↗</span></div><div class="marketing-window"><div class="marketing-window-bar"><i></i><i></i><i></i><span>PRODUCT CATALOG</span></div><div class="marketing-product-skeleton"><div class="marketing-product-block"></div><div><b>Browse products</b><small>Search · Categories · Cart</small><span class="marketing-mini-button">View storefront</span></div></div></div><h3>Online storefront</h3><p>Explore products and submit a sample order.</p></a>
+          <a class="marketing-demo-panel" href="/admin"><div class="marketing-demo-panel-top"><span>02 — TEAM WORKSPACE</span><span>↗</span></div><div class="marketing-window"><div class="marketing-window-bar"><i></i><i></i><i></i><span>ORDER MANAGEMENT</span></div><div class="marketing-admin-skeleton"><div class="marketing-admin-side"></div><div class="marketing-admin-content"><b>Operations overview</b><div></div><div></div><div></div><div></div></div></div></div><h3>Admin & order workspace</h3><p>Review catalog, stock and sample order workflows.</p></a>
+        </div>
+      </section>
 
-    <section class="warehouse-contact">
-      <div><span class="eyebrow">Start with a conversation</span><h2>Let's understand how your warehouse works.</h2><p>Share a little about your business and request a meeting. We'll review your website and current operation before discussing a practical next step.</p><p class="warehouse-contact-note">Use the existing SachinTechPro contact form to provide your details, preferred meeting times and address. Your request is sent by email; the meeting is confirmed directly.</p></div>
-      <div class="warehouse-contact-actions"><a class="btn btn-primary" href="https://sachintechpro.github.io/?project=commercedesk#contact" target="_blank" rel="noopener noreferrer">Request a discovery meeting ↗</a><a class="warehouse-text-link" href="/shop">Or continue to the storefront demo →</a></div>
-    </section>`;
+      <section class="marketing-section marketing-approach" id="approach">
+        <div class="marketing-section-intro"><div><span class="marketing-eyebrow">A PRACTICAL WAY TO START</span><h2>Understand first.<br>Build with purpose.</h2></div><p>No assumptions about how your business should work. We learn your current process, identify the right opportunities and agree on a clear scope before development begins.</p></div>
+        <div class="marketing-steps">
+          <div><span>01</span><b>Discover</b><p>We review your business, website, people and current workflows.</p></div>
+          <div><span>02</span><b>Assess</b><p>We identify bottlenecks, handoffs, systems and improvement opportunities.</p></div>
+          <div><span>03</span><b>Propose</b><p>You receive a recommended solution, scope, roadmap, timeline and proposal.</p></div>
+          <div><span>04</span><b>Deliver</b><p>Once agreed, we build, test, deploy and hand over the solution.</p></div>
+        </div>
+      </section>
+
+      <section class="marketing-final-cta">
+        <div><span class="marketing-eyebrow">LET'S TALK ABOUT YOUR OPERATION</span><h2>What could work better<br>in your warehouse?</h2><p>Tell us how orders move through your business. We'll take a look at your current setup and arrange a discovery conversation.</p></div>
+        <div class="marketing-final-actions"><a class="btn marketing-btn-light marketing-btn-large" href="https://sachintechpro.github.io/?project=commercedesk#contact" target="_blank" rel="noopener noreferrer">Request a discovery meeting <span>↗</span></a><a href="/shop" class="marketing-final-demo">Prefer to explore first? View the demo →</a><small>Share your preferred meeting times and address through our existing contact form. We'll confirm the meeting directly.</small></div>
+      </section>
+      <footer class="marketing-footer"><a class="marketing-brand" href="/"><span class="marketing-brand-mark">C</span><span>CommerceDesk<small>OPERATIONS, CONNECTED.</small></span></a><span>Custom digital workflows for warehouse and distribution businesses.</span><a href="/shop">Explore demo →</a></footer>
+    </div>`;
 }
+
 async function shop(){const params=new URLSearchParams(location.search);let cat=null;if(location.pathname.startsWith('/category/'))cat=categories.find(x=>categorySlug(x)===location.pathname.split('/').pop())||null;const q=params.get('q')||'';let items=await catalog();if(cat)items=items.filter(p=>p.category===cat);if(q)items=items.filter(p=>(p.name+' '+p.sku+' '+p.category+' '+p.description).toLowerCase().includes(q.toLowerCase()));const sort=params.get('sort')||'featured';if(sort==='price_low')items.sort((a,b)=>a.price_cents-b.price_cents);if(sort==='price_high')items.sort((a,b)=>b.price_cents-a.price_cents);if(sort==='name')items.sort((a,b)=>a.name.localeCompare(b.name));app.innerHTML=`${breadcrumbs([cat||'Shop',null])}<div class="shop-layout"><aside class="sidebar"><h3>PRODUCT CATEGORIES</h3><a href="/shop" class="${cat?'':'active'}">All products</a>${categories.map(c=>`<a class="${cat===c?'active':''}" href="/category/${categorySlug(c)}">${esc(c)}</a>`).join('')}</aside><section><div class="split-head"><div><span class="eyebrow">Shop our catalog</span><h1>${esc(q?'Search results':cat||'All products')}</h1>${q?`<p class="muted">Search: “${esc(q)}”</p>`:''}</div></div><div class="shop-toolbar"><span class="small muted">${items.length} product${items.length===1?'':'s'} found</span><label class="small">Sort by <select id="shop-sort"><option value="featured" ${sort==='featured'?'selected':''}>Featured</option><option value="name" ${sort==='name'?'selected':''}>Name</option><option value="price_low" ${sort==='price_low'?'selected':''}>Price: low to high</option><option value="price_high" ${sort==='price_high'?'selected':''}>Price: high to low</option></select></label></div>${items.length?`<div class="product-grid">${items.map(productCard).join('')}</div>`:'<div class="empty">No products match these filters. Try another category or search.</div>'}</section></div>`;$('#shop-sort').addEventListener('change',e=>{const u=new URL(location.href);u.searchParams.set('sort',e.target.value);location.assign(u.pathname+u.search)})}
 async function productPage(){const slug=location.pathname.split('/').pop();let data;try{data=await api('/api/product/'+encodeURIComponent(slug))}catch{app.innerHTML='<div class="error-page"><h1>Product not found</h1><a href="/shop" class="btn">Browse products</a></div>';return}const p=data.product;app.innerHTML=`${breadcrumbs(['Shop','/shop'],[p.category,'/category/'+categorySlug(p.category)],[p.name,null])}<div class="details"><div><img class="product-main-photo" src="${esc(p.image_url)}" alt="${esc(p.name)}"><p class="tiny muted">SKU-matched catalog image · Fictional sample product</p></div><div class="product-details"><span class="eyebrow">${esc(p.category)}</span><h1>${esc(p.name)}</h1><div class="tiny muted">SKU: ${esc(p.sku)} · Demonstration listing</div><div class="price">${money(p.price_cents)}</div><span class="stock ${p.stock?'':'out'}">${p.stock?`In stock · ${p.stock} available`:'Currently out of stock'}</span><div class="details-info"><p><b>Description</b></p><p class="detail-text">${esc(p.description)}</p><p><b>Category</b> ${esc(p.category)}</p><p><b>SKU</b> ${esc(p.sku)}</p></div><div class="buy-row"><label for="detail-qty">Qty</label><input class="qty" id="detail-qty" type="number" min="1" max="${Math.max(1,p.stock)}" value="1" ${p.stock?'':'disabled'}><button class="btn btn-primary" data-add="${esc(p.sku)}" ${p.stock?'':'disabled'}>${p.stock?'Add to cart':'Unavailable'}</button></div><p class="tiny muted">Checkout and shipments are simulated. No real payment is collected.</p></div></div><div class="info-strip"><h3>Product information</h3><p>SKU ${esc(p.sku)} · Category ${esc(p.category)}. Inventory and pricing reflect the current demonstration catalog.</p></div><div class="section-head"><div><span class="eyebrow">You might also need</span><h2>Related products</h2></div><a href="/category/${categorySlug(p.category)}" class="small">See category →</a></div><div class="product-grid">${data.related.map(productCard).join('')||'<p class="muted">No related products yet.</p>'}</div>`}
 async function cartPage(){let products=await catalog();let lines=Object.entries(cart).map(([sku,qty])=>({p:products.find(p=>p.sku===sku),qty:Number(qty)})).filter(x=>x.p);if(!lines.length){app.innerHTML=`${breadcrumbs(['Cart',null])}<div class="error-page"><h1>Your cart is empty</h1><p class="muted">Browse the fictional catalog to add items.</p><a class="btn btn-primary" href="/shop">Continue shopping</a></div>`;return}const total=lines.reduce((s,l)=>s+l.p.price_cents*l.qty,0);app.innerHTML=`${breadcrumbs(['Cart',null])}<h1>Shopping cart</h1><div class="two-col"><div class="card panel"><div class="table-wrap"><table class="cart-table"><thead><tr><th colspan="2">Product</th><th>Qty</th><th>Total</th></tr></thead><tbody>${lines.map(({p,qty})=>`<tr><td><a href="/product/${p.slug}"><img src="${p.image_url}" alt="${esc(p.name)}"></a></td><td><b>${esc(p.name)}</b><p class="muted tiny">${esc(p.sku)} · ${money(p.price_cents)}</p><button class="btn btn-sm" data-remove="${esc(p.sku)}">Remove</button></td><td><input class="qty" type="number" min="1" max="99" value="${qty}" data-cartqty="${esc(p.sku)}" aria-label="Quantity for ${esc(p.name)}"></td><td><b>${money(p.price_cents*qty)}</b></td></tr>`).join('')}</tbody></table></div></div><aside class="card summary-card"><h3>Order summary</h3><div class="summary-line"><span>Items</span><b>${lines.reduce((s,x)=>s+x.qty,0)}</b></div><div class="summary-line"><span>Shipping & tax</span><span>Not collected (demo)</span></div><div class="summary-line total"><span>Demo subtotal</span><span>${money(total)}</span></div><a href="/checkout" class="btn btn-primary" style="width:100%">Proceed to demo checkout</a><p class="muted tiny" style="margin-top:15px">No card details or payment information required. Stock will be rechecked at order submission.</p></aside></div>`}
@@ -158,7 +179,7 @@ function aboutPublicPage(){
  app.innerHTML=`<div class="eyebrow">About this demonstration</div><h1>CommerceDesk</h1><p class="subtitle">A B2B commerce and product-operations demonstration for distributors and wholesalers.</p><div class="panel"><h2>What it demonstrates</h2><p>A product catalog and storefront connected to inventory-aware order creation, product administration, spreadsheet-based catalog onboarding and sample fulfillment operations.</p></div><div class="panel"><h2>Who it is for</h2><p>Glass and glazing suppliers, building-material distributors, hardware wholesalers and other businesses managing product SKUs, stock and customer orders.</p></div><div class="panel"><h2>Working capabilities and boundaries</h2><p>Product and order records, server-side validation, stock reservation, batch import review and simulated order processing are implemented in this demo. Payment processing, carrier postage, live tracking, supplier messaging and external integrations are illustrative and not connected.</p></div><div class="info-strip"><h3>Built by SachinTechPro</h3><p>Explore how a workflow can be adapted to your business and connected to the systems you already use.</p><a class="btn btn-primary" href="https://sachintechpro.github.io/?project=commercedesk#contact" target="_blank" rel="noopener noreferrer">Contact SachinTechPro ↗</a></div>`;
 }
 
-async function main(){updateCartCount();const path=location.pathname.replace(/\/$/,'')||'/';try{if(path==='/')await home();else if(path==='/how-to')howToPublicPage();else if(path==='/about')aboutPublicPage();else if(path==='/shop'||path.startsWith('/category/'))await shop();else if(path.startsWith('/product/'))await productPage();else if(path==='/cart')await cartPage();else if(path==='/checkout')await checkout();else if(path==='/confirmation')confirmation();else if(path==='/admin/login')login();else if(path.startsWith('/admin')){if(!await checkAdmin()){login();return}if(path==='/admin')await dashboard();else if(path==='/admin/products')await productsAdmin();else if(path==='/admin/integrations')integrationsPage();else if(path==='/admin/how-to')howToPage();else if(path==='/admin/about')aboutPage();else if(path.startsWith('/admin/products/'))await productEditor();else if(path==='/admin/import')await csvImport();else if(path==='/admin/orders')await ordersAdmin();else if(path.startsWith('/admin/orders/'))await orderDetails();else await dashboard()}else app.innerHTML='<div class="error-page"><h1>Page not found</h1><a class="btn" href="/">Home</a></div>'}catch(err){app.innerHTML=`<div class="error-page"><h1>Unable to load this page</h1><p class="muted">${esc(err.message)}</p><a href="/" class="btn">Go home</a></div>`;console.error(err)}}
+async function main(){updateCartCount();const path=location.pathname.replace(/\/$/,'')||'/';document.body.classList.toggle('marketing-home',path==='/');try{if(path==='/')await home();else if(path==='/how-to')howToPublicPage();else if(path==='/about')aboutPublicPage();else if(path==='/shop'||path.startsWith('/category/'))await shop();else if(path.startsWith('/product/'))await productPage();else if(path==='/cart')await cartPage();else if(path==='/checkout')await checkout();else if(path==='/confirmation')confirmation();else if(path==='/admin/login')login();else if(path.startsWith('/admin')){if(!await checkAdmin()){login();return}if(path==='/admin')await dashboard();else if(path==='/admin/products')await productsAdmin();else if(path==='/admin/integrations')integrationsPage();else if(path==='/admin/how-to')howToPage();else if(path==='/admin/about')aboutPage();else if(path.startsWith('/admin/products/'))await productEditor();else if(path==='/admin/import')await csvImport();else if(path==='/admin/orders')await ordersAdmin();else if(path.startsWith('/admin/orders/'))await orderDetails();else await dashboard()}else app.innerHTML='<div class="error-page"><h1>Page not found</h1><a class="btn" href="/">Home</a></div>'}catch(err){app.innerHTML=`<div class="error-page"><h1>Unable to load this page</h1><p class="muted">${esc(err.message)}</p><a href="/" class="btn">Go home</a></div>`;console.error(err)}}
 document.addEventListener('click',e=>{const add=e.target.closest('[data-add]');if(add){const sku=add.dataset.add;const qty=Number($('#detail-qty')?.value||1);if(!Number.isInteger(qty)||qty<1||qty>99){notify('Choose a quantity between 1 and 99.');return}cart[sku]=(cart[sku]||0)+qty;saveCart();notify(`${sku} added to cart.`)}const remove=e.target.closest('[data-remove]');if(remove){delete cart[remove.dataset.remove];saveCart();cartPage()}});
 document.addEventListener('change',e=>{const target=e.target.closest('[data-cartqty]');if(target){const qty=Number(target.value);if(!Number.isInteger(qty)||qty<1||qty>99){notify('Quantity must be 1–99.');target.value=cart[target.dataset.cartqty];return}cart[target.dataset.cartqty]=qty;saveCart();cartPage()}});
 main();

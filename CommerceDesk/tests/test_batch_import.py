@@ -18,6 +18,11 @@ class SpreadsheetImportTests(unittest.TestCase):
     def test_csv_is_normalized(self):
         rows=parse_import_source({'file_name':'products.csv','csv_text':'sku,name\nGL-1001,Tempered Panel\n'})
         self.assertEqual(rows[0]['sku'],'GL-1001')
+    def test_header_aliases_normalize_to_product_schema(self):
+        rows=parse_import_source({'file_name':'products.csv','csv_text':'SKU,Product Name,Unit Price,Quantity,SLU,Image Path\\nGL-1001,Panel,19.95,7,782341,catalog/782341.png\\n'})
+        self.assertEqual(rows[0]['name'],'Panel');self.assertEqual(rows[0]['price'],'19.95');self.assertEqual(rows[0]['stock'],'7');self.assertEqual(rows[0]['slu_number'],'782341')
+    def test_google_sheet_fragment_gid(self):
+        self.assertIn('gid=42',_google_csv_url('https://docs.google.com/spreadsheets/d/abc123/edit#gid=42'))
     def test_google_sheet_host_validation(self):
         with self.assertRaises(ValueError):_google_csv_url('https://evil.example/spreadsheets/d/not-a-sheet')
     def test_missing_sku_rejected(self):

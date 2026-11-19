@@ -93,6 +93,7 @@ def init_database():
                 img=ROOT/'samples'/'images'/f'{sku}.png'
                 if img.exists():
                     conn.execute('INSERT INTO images VALUES(?,?,?)',(sku,'image/png',img.read_bytes()))
+            conn.execute("UPDATE products SET slu_number=substr(sku,instr(sku,'-')+1), image_location='samples/images/'||sku||'.png' WHERE slu_number='' OR image_location=''")
             # Seed a ready order (reserve 2 hinges) and one held order; no real customer data.
             conn.execute('UPDATE products SET stock=stock-2 WHERE sku="GH-101"')
             conn.execute('INSERT INTO orders(id,buyer,city,status,created_at,label_ref) VALUES(?,?,?,?,?,NULL)',('DEMO-1001','Taylor Sample','Fictional City, CA','ready',now()))

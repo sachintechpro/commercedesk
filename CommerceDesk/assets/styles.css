@@ -308,3 +308,9 @@ body.marketing-home .page-main{width:100%;max-width:none;padding:0;margin:0;min-
 .storefront-footer>small{font-size:9px;color:#988e99}
 @media(max-width:900px){.storefront-home{width:calc(100% - 38px)}.storefront-nav{gap:14px}.storefront-hero{gap:20px}.storefront-hero-visual{min-height:340px}.storefront-category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:650px){.storefront-home{width:calc(100% - 30px)}.storefront-topline{font-size:9px}.storefront-topline span:last-child{display:none}.storefront-header{height:70px;gap:10px}.storefront-logo{font-size:15px}.storefront-logo-mark{width:34px;height:34px}.storefront-nav{display:none}.storefront-header-actions{gap:9px}.storefront-header-cta{padding:10px 11px;font-size:10px}.storefront-cart-link{font-size:10px}.storefront-hero{grid-template-columns:1fr;padding:37px 0 32px}.storefront-hero h1{font-size:48px}.storefront-hero-visual{min-height:285px}.storefront-trust-strip{grid-template-columns:1fr;gap:13px;padding:18px}.storefront-trust-strip>div{padding:0 0 0 12px}.storefront-section,.storefront-featured{padding-top:52px}.storefront-section-heading{align-items:flex-start;flex-direction:column;gap:10px}.storefront-category-grid{gap:9px}.storefront-category-image{height:125px}.storefront-category-info{padding:11px;display:block}.storefront-category-count{display:block;margin-top:7px}.storefront-business-band{grid-template-columns:1fr;gap:22px;margin:50px 0;padding:25px 19px}.storefront-footer{flex-wrap:wrap}.storefront-footer>div{order:3;width:100%;flex-wrap:wrap}.storefront-footer>small{width:100%}}
+
+/* Ensure the dark Northline feature band keeps strong text contrast */
+.storefront-business-band h2{color:#fff!important}
+.storefront-business-band>div:first-child>p{color:#e2dbe5!important}
+.storefront-business-points b{color:#fff!important}
+.storefront-business-points small{color:#d0c7d4!important}

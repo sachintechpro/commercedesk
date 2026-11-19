@@ -44,6 +44,9 @@ try:
    image=page.request.get(base+product['image_url']);assert image.status==200,product['sku']
   elapsed=(time.perf_counter()-started)*1000;assert elapsed<15000,elapsed
   print('Product detail links + images verified:',len(catalog),'items in',round(elapsed,1),'ms')
+  page.set_viewport_size({'width':390,'height':844});page.goto(base+'/');assert page.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1')
+  page.goto(base+'/admin');assert page.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1')
+  print('Mobile storefront and admin layouts verified')
   page.goto(base+'/admin/orders/DEMO-1002');page.get_by_text('Inventory shortage').wait_for();assert page.get_by_role('button',name='Generate sample shipping label').count()==0
   page.screenshot(path=str(root/'admin-preview.png'),full_page=True)
   print('Shortage label block verified')

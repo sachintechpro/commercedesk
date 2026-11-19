@@ -26,6 +26,14 @@ class ModelRulesTests(unittest.TestCase):
         data=base64.b64encode((ROOT/'samples/images/GH-101.png').read_bytes()).decode()
         mime, blob=verify_image('GH-101.png',data,'GH-101');self.assertEqual(mime,'image/png');self.assertTrue(blob)
         with self.assertRaises(InputError):verify_image('GH-102.png',data,'GH-101')
+    def test_slu_filename_token_matching(self):
+        data=base64.b64encode((ROOT/'samples/images/GH-205.png').read_bytes()).decode()
+        self.assertTrue(verify_image('glass-front_205.png',data,'GH-205','205')[1])
+        for filename,slu in [('glass-front_2050.png','205'),('glass-front-1205.png','205'),('glass-front_205.jpg','205')]:
+            with self.subTest(filename=filename),self.assertRaises(InputError):verify_image(filename,data,'GH-205',slu)
+    def test_new_product_requires_slu_and_image_location(self):
+        _,errors=product_fields({'sku':'AB-123','name':'X','category':'Glass Door Hardware','description':'Test','price':'11.50','stock':'3'},image_present=True)
+        self.assertIn('slu_number',errors);self.assertIn('image_location',errors)
     def test_corrupt_image(self):
         with self.assertRaises(InputError):verify_image('GH-101.png',base64.b64encode(b'not an image').decode(),'GH-101')
     def test_csv_parses_quoted_comma(self):

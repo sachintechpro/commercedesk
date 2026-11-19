@@ -70,7 +70,7 @@ class ApiJourneyTests(unittest.TestCase):
         code,img=self.req('GET','/api/images/GH-205');self.assertEqual(code,200)
     def test_07_update_product_reflected(self):
         csrf=self.login();code,r=self.req('PUT','/api/admin/products/GH-205',{'sku':'GH-205','price':'29.99'},csrf);self.assertEqual(code,200,r)
-        code,r=self.req('GET','/api/product/'+r['product']['slug']);self.assertEqual(r['product']['price_cents'],2999)
+        code,r=self.req('GET','/api/product/'+r['product']['slug']);self.assertEqual(r['product']['price_cents'],2999);self.assertEqual(r['product']['slu_number'],'205');self.assertTrue(r['product']['image_location'].endswith('GH-205.png'))
     def test_08_csv_import_valid(self):
         csrf=self.login();csv=(ROOT/'samples/products-create.csv').read_text()
         # Already created GH-205 above, so import GS-305 and GT-505 only.

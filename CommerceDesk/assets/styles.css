@@ -314,3 +314,12 @@ body.marketing-home .page-main{width:100%;max-width:none;padding:0;margin:0;min-
 .storefront-business-band>div:first-child>p{color:#e2dbe5!important}
 .storefront-business-points b{color:#fff!important}
 .storefront-business-points small{color:#d0c7d4!important}
+
+
+/* Keep the storefront demo CTA label visible on mobile and desktop */
+a.marketing-demo-copy a.marketing-btn-large,
+a.marketing-demo-copy a.marketing-btn-large:link,
+a.marketing-demo-copy a.marketing-btn-large:visited,
+a.marketing-demo-copy a.marketing-btn-large:hover,
+a.marketing-demo-copy a.marketing-btn-large:focus{background:#fff!important;color:#0b2545!important;-webkit-text-fill-color:#0b2545!important;border:1px solid #fff!important;font-size:12px!important;font-weight:800!important;opacity:1!important;visibility:visible!important;text-indent:0!important}
+a.marketing-demo-copy a.marketing-btn-large span{color:#0b2545!important;-webkit-text-fill-color:#0b2545!important}

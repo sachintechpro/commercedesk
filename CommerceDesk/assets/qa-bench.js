@@ -183,6 +183,6 @@ document.addEventListener('submit',e=>{const f=e.target;if(!['manual-form','cust
 if(f.id==='manual-form'){if(!d.status||!String(d.actual||'').trim())return;state.executions.unshift({caseId:selected,status:d.status,actual:d.actual,notes:d.notes||'',time:new Date().toISOString()});save();draw();note('Tester-entered manual result saved. This is not an independently executed automated test.')}
 if(f.id==='custom-form'){const id='CUSTOM-'+String(state.customCases.length+1).padStart(3,'0');state.customCases.push({id,req:d.req,title:d.title,level:d.level,priority:'P1',pre:d.pre,steps:d.steps,expected:d.expected});selected=id;save();switchTab('manual');note('Custom manual case saved in your browser.')}
 if(f.id==='defect-form'){state.defects.unshift({id:'DEF-'+Date.now().toString(36).toUpperCase(),caseId:d.caseId,title:d.title,severity:d.severity,description:d.description,status:'Open',time:new Date().toISOString()});save();draw();note('Defect recorded. Add supporting evidence from Manual QA.')}});
-document.getElementById('project-title').textContent=C.name+' QA Bench';document.getElementById('project-sub').textContent=C.domain;document.getElementById('app-link').href=C.url;document.getElementById('source-link').href=C.sourceUrl;document.getElementById('ci-link').href=C.ciUrl;
+document.getElementById('project-title').textContent=C.name+' QA Bench';document.getElementById('project-sub').textContent=C.domain;document.getElementById('app-link').href=C.url;
 draw();
 })();

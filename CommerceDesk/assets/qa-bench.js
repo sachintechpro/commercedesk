@@ -36,10 +36,6 @@ const qaCategories=[
   'Security / RBAC','UAT / smoke'
 ];
 const qaEsc=s=>esc(s);
-function qaSrcLink(x){
-  const p=String(x.file||'').split('/').map(encodeURIComponent).join('/');
-  return 'https://github.com/sachintechpro/'+encodeURIComponent(C.repository)+'/blob/main/'+p+(x.line?'#L'+x.line:'');
-}
 function qaBadge(st){
  const label=String(st||'Not checked');
  const cls=label==='success'||label==='Passed'?'passed':label==='failure'||label==='Failed'?'failed':label==='in_progress'||label==='queued'?'blocked':'';
@@ -48,17 +44,9 @@ function qaBadge(st){
 function qaCatCounts(){
  return qaCategories.map(cat=>({name:cat,count:(C.technicalCases||[]).filter(t=>t.category===cat).length}))
 }
-function qaCiWorkflowLink(path){
- const file=String(path||'').split('/').pop();
- return 'https://github.com/sachintechpro/'+encodeURIComponent(C.repository)+'/actions/workflows/'+encodeURIComponent(file);
-}
 function qaCiResult(file){
  if(!Array.isArray(qaCiRuns))return null;
  return qaCiRuns.find(r=>String(r.path||'')===file)||null;
-}
-function qaCiLink(r){
- const u=String(r?.html_url||'');
- return u.startsWith('https://github.com/')?'<a target="_blank" rel="noopener noreferrer" href="'+qaEsc(u)+'">Inspect actual run ↗</a>':'';
 }
 function qaEngineering(){
  const tc=C.technicalCases||[];
@@ -69,7 +57,7 @@ function qaEngineering(){
  return '<section class="tech-workbench"><div class="tech-hero"><div><span class="tech-kicker">LIVE TEST ENGINEERING · '+qaEsc(C.domain)+'</span><h2>Actual tests. Source assertions. Verifiable evidence.</h2><p>Source-backed cases come from this application’s real repository. Browser-local manual verdicts, safe HTTP checks and GitHub CI results remain separate—no prefilled pass rates.</p></div><a class="btn" href="'+qaEsc(C.sourceUrl)+'" target="_blank" rel="noopener noreferrer">Inspect repository ↗</a></div>'+
  '<div class="tech-stats">'+
  '<div class="tech-stat"><strong>'+tc.length+'</strong><span>Source-backed test cases</span><small>Test functions and assertions</small></div>'+
- '<div class="tech-stat"><strong>'+(C.suites||[]).length+'</strong><span>Test suites/files</span><small>Clickable source paths</small></div>'+
+ '<div class="tech-stat"><strong>'+(C.suites||[]).length+'</strong><span>Test suites/files</span><small>Source-backed test inventory</small></div>'+
  '<div class="tech-stat"><strong>'+C.automatic.length+'</strong><span>Runnable live checks</span><small>'+proofCount+' passed of '+actual.length+' attempted</small></div>'+
  '<div class="tech-stat"><strong>'+cases().length+'</strong><span>Manual cases</span><small>'+manualRan+' cases executed in this browser</small></div>'+
  '</div>'+
@@ -81,9 +69,9 @@ function qaEngineering(){
  '<div class="actions"><button class="btn alt" data-act="qa-go-ci">Open CI evidence</button><button class="btn alt" data-act="qa-go-runner">Run safe live checks</button></div></section></div>'+
  '<section class="panel"><h3>Engineering walkthrough for hiring managers</h3>'+
  '<div class="tech-walkthrough">'+
- '<div><strong>01 · Inspect a business rule</strong><p>Open a real test function and verify its input, assertion and source location.</p></div>'+
+ '<div><strong>01 · Inspect a business rule</strong><p>Review the test function, assertion and source location recorded in the QA catalog.</p></div>'+
  '<div><strong>02 · Execute a safe check</strong><p>Run live read-only HTTP or deterministic engine checks and inspect actual responses.</p></div>'+
- '<div><strong>03 · Inspect CI history</strong><p>Verify the exact workflow, commit, conclusion and logs in GitHub Actions.</p></div>'+
+ '<div><strong>03 · Inspect CI history</strong><p>Review workflow execution evidence captured in this QA Bench.</p></div>'+
  '<div><strong>04 · Record QA evidence</strong><p>Complete a manual case, capture observed behavior, link a defect and export the result.</p></div></div></section></section>';
 }
 function qaCatalog(){
@@ -95,7 +83,7 @@ function qaCatalog(){
  '<div class="tech-source-list">'+filtered.map(t=>'<details class="panel tech-source"><summary><span class="tech-source-title"><strong>'+qaEsc(t.id)+'</strong> '+qaEsc(t.title)+'</span><span>'+qaBadge(t.category)+'</span></summary>'+
  '<div class="tech-source-body"><div class="tech-tags"><span>'+qaEsc(t.framework)+'</span><span>'+qaEsc(t.file)+'</span><span>Line '+qaEsc(t.line)+'</span></div>'+
  '<p><b>Actual assertion / technical check from source</b></p><pre>'+qaEsc(t.excerpt||'See source for implementation')+'</pre>'+
- '<p class="fine">Linked source reference is inspectable. CI results are shown in the separate CI & artifacts section; test code alone is not evidence of execution.</p>'+
+ '<p class="fine">The test source location and assertion are shown for traceability. CI results are shown in the separate CI & artifacts section; test code alone is not evidence of execution.</p>'+
  '<div class="cardlinks"><a href="'+qaSrcLink(t)+'" target="_blank" rel="noopener noreferrer">View exact source line ↗</a><a href="'+qaCiWorkflowLink((C.workflows||[])[0]?.path)+'" target="_blank" rel="noopener noreferrer">CI workflows ↗</a></div></div></details>').join('')+'</div>'+
  (filtered.length?'':'<div class="note">No source-backed tests in this category yet; this is a visibility gap, not a pass.</div>')+'</section>';
 }
@@ -121,7 +109,7 @@ function qaCiView(){
  const workflows=C.workflows||[];
  const fetchState=qaCiBusy?'Checking GitHub Actions…':qaCiError?'Unable to verify CI: '+qaCiError:Array.isArray(qaCiRuns)?'Last checked: '+new Date(qaCiAt).toLocaleString():'No API request made yet — CI status unknown';
  const relevant=Array.isArray(qaCiRuns)?qaCiRuns.filter(r=>workflows.some(w=>w.path===r.path)).slice(0,14):[];
- return '<section class="tech-workbench"><h2>CI executions, code provenance & artifacts</h2><p>Evidence is fetched directly from the public GitHub Actions API, not from manually maintained pass counters. Click the run link for logs, failures, artifacts and commit details.</p>'+
+ return '<section class="tech-workbench"><h2>CI executions, code provenance & artifacts</h2><p>Evidence is fetched from the configured CI workflow service, not from manually maintained pass counters. Run status, commit details and execution evidence are shown here without outbound code or repository links.</p>'+
  '<div class="tech-ci-header"><span class="fine" role="status">'+qaEsc(fetchState)+'</span><button class="btn" data-act="qa-refresh-ci" '+(qaCiBusy?'disabled':'')+'>'+ (qaCiBusy?'Checking…':'Refresh actual CI status')+'</button></div>'+
  '<div class="grid">'+workflows.map(w=>{const run=qaCiResult(w.path);return '<article class="panel"><div class="row"><strong>'+qaEsc(w.name)+'</strong>'+qaBadge(run?run.conclusion||run.status:'Not checked')+'</div>'+
  '<p>'+qaEsc(w.description||'Repository workflow')+'</p><p class="fine">Workflow: '+qaEsc(w.path)+'</p>'+

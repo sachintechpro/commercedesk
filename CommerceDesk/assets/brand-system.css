@@ -186,3 +186,218 @@ h1{font-weight:780;letter-spacing:-.045em}
 .marketing-demo-band .marketing-demo-panel p {
   color: #d3deeb;
 }
+
+
+/* Surgical responsive and control-contrast pass — November 2026 */
+/* Shared controls: predictable, readable default, hover, focus and disabled states. */
+.btn,
+button.btn,
+a.btn {
+  min-height:44px;
+  color:#392c4d;
+  background:#fff;
+  border:1px solid #d8cddd;
+  text-decoration:none;
+  transition:background-color .16s ease,color .16s ease,border-color .16s ease,box-shadow .16s ease,transform .16s ease;
+}
+.btn:hover,
+button.btn:hover,
+a.btn:hover {
+  color:#392c4d;
+  background:#f1ebf8;
+  border-color:#bca9ce;
+}
+.btn-primary,
+button.btn-primary,
+a.btn-primary {
+  color:#fff!important;
+  background:#55406f;
+  border-color:#55406f;
+}
+.btn-primary:hover,
+button.btn-primary:hover,
+a.btn-primary:hover {
+  color:#fff!important;
+  background:#392c4d;
+  border-color:#392c4d;
+}
+.btn-dark,
+button.btn-dark,
+a.btn-dark {
+  color:#fff!important;
+  background:#30243f;
+  border-color:#30243f;
+}
+.btn-dark:hover,
+button.btn-dark:hover,
+a.btn-dark:hover {
+  color:#fff!important;
+  background:#55406f;
+  border-color:#55406f;
+}
+.btn-danger,
+button.btn-danger,
+a.btn-danger {
+  color:#9f3038!important;
+  background:#fff;
+  border-color:#d99da0;
+}
+.btn-danger:hover,
+button.btn-danger:hover,
+a.btn-danger:hover {
+  color:#fff!important;
+  background:#9f3038;
+  border-color:#9f3038;
+}
+.btn:focus-visible,
+button:focus-visible,
+a.btn:focus-visible {
+  outline:3px solid rgba(241,126,104,.72);
+  outline-offset:3px;
+}
+.btn:disabled,
+button:disabled {
+  cursor:not-allowed;
+  opacity:.55;
+  transform:none;
+}
+.search-bar button,
+.storefront-search button {
+  color:#392c4d;
+  background:#ffd65a;
+  border:1px solid #e9bd42;
+}
+.search-bar button:hover,
+.storefront-search button:hover {
+  color:#30243f;
+  background:#edbd3f;
+  border-color:#d9a92d;
+}
+.admin-nav button#admin-logout {
+  color:#8f343b;
+  background:#fff;
+  border:1px solid #e5c5c3;
+}
+.admin-nav button#admin-logout:hover {
+  color:#fff;
+  background:#9f3038;
+  border-color:#9f3038;
+}
+.storefront-header-cta,
+.storefront-primary-btn {
+  color:#fff!important;
+  background:#392c4d;
+  border:1px solid #392c4d;
+}
+.storefront-header-cta:hover,
+.storefront-primary-btn:hover {
+  color:#fff!important;
+  background:#55406f;
+  border-color:#55406f;
+}
+.storefront-home button,
+.marketing-shell button {
+  min-height:44px;
+}
+html,body {max-width:100%;overflow-x:hidden}
+img,svg,video,canvas {max-width:100%}
+#app,.shell,.page-main,.admin-layout,.admin-panel,.marketing-shell,.storefront-home {min-width:0}
+.table-wrap {max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.table-wrap table {min-width:640px}
+.cart-table {min-width:540px}
+.data-table {min-width:760px}
+.field,.field input,.field select,.field textarea,.form-grid>* {min-width:0}
+.row,.panel-head,.split-head,.shop-toolbar,.buy-row,.form-actions {min-width:0}
+@media(max-width:900px) {
+  .admin-layout {grid-template-columns:minmax(0,1fr);gap:16px}
+  .admin-nav {position:static;min-width:0;display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;gap:4px}
+  .admin-nav .workspace-brand,.admin-nav .workspace-label {flex:0 0 100%;width:100%}
+  .admin-nav a.workspace-link {width:auto;flex:0 1 auto;white-space:normal}
+  .admin-nav button#admin-logout {width:auto;margin:8px 0 0 auto}
+  .admin-panel {min-width:0}
+  .site-header-top {gap:14px}
+  .nav-inner {overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin}
+  .marketing-nav {flex-wrap:wrap;gap:12px}
+  .marketing-nav-links {order:3;flex:1 0 100%;justify-content:center;flex-wrap:wrap;gap:12px 20px}
+  .marketing-nav-actions {margin-left:auto}
+  .storefront-header {height:auto;min-height:70px;flex-wrap:wrap;padding:12px 0}
+  .storefront-nav {display:none}
+  .storefront-header-actions {margin-left:auto}
+  .storefront-hero {grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:20px}
+  .storefront-category-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .metrics {grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:700px) {
+  .shell {width:calc(100% - 30px)}
+  .site-header-top {display:flex;flex-wrap:wrap;gap:12px}
+  .site-header-top>.brand {flex:1 1 auto;min-width:0}
+  .header-links {order:2;flex:1 1 100%;justify-content:flex-end;margin-left:0;gap:18px}
+  .search-bar {order:3;flex:1 1 100%;max-width:none;min-width:0}
+  .nav-inner {gap:18px}
+  .page-main {padding-top:22px;padding-bottom:44px}
+  .hero,.warehouse-hero,.integration-hero,.marketing-hero,.storefront-hero,.storefront-business-band {grid-template-columns:minmax(0,1fr)}
+  .hero-copy,.warehouse-hero {padding:26px 20px}
+  .hero-right {min-height:190px}
+  .shop-layout,.details,.two-col {grid-template-columns:minmax(0,1fr);gap:18px}
+  .sidebar {display:flex;flex-wrap:wrap;gap:8px}
+  .sidebar h3 {flex:0 0 100%}
+  .stat-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .order-list,.integration-grid {grid-template-columns:minmax(0,1fr)}
+  .form-grid,.preview-grid {grid-template-columns:minmax(0,1fr)}
+  .field.full {grid-column:1}
+  .panel-head,.split-head,.shop-toolbar {align-items:flex-start;flex-wrap:wrap}
+  .buy-row,.form-actions {flex-wrap:wrap}
+  .marketing-nav {align-items:center}
+  .marketing-nav-links {justify-content:flex-start}
+  .marketing-nav-actions {display:flex;flex-wrap:wrap;gap:8px}
+  .storefront-hero {padding:36px 0 28px}
+  .storefront-hero h1 {font-size:clamp(38px,10vw,48px)}
+  .storefront-hero-visual {min-height:270px}
+  .storefront-trust-strip {grid-template-columns:minmax(0,1fr)}
+  .storefront-business-band {gap:22px;margin:48px 0;padding:24px 18px}
+  .storefront-section,.storefront-featured {padding-top:46px}
+  .storefront-footer {align-items:flex-start;flex-wrap:wrap}
+  .footer-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .data-table {min-width:760px}
+  .metrics {grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:480px) {
+  h1 {font-size:clamp(25px,8vw,32px)}
+  .site-header-top>.brand b {font-size:17px}
+  .site-header-top>.brand small {letter-spacing:1.2px}
+  .header-links {justify-content:space-between;font-size:12px}
+  .nav-inner {gap:16px}
+  .product-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .product-content {padding:10px}
+  .product-content .btn {padding:9px 8px;font-size:10px}
+  .category-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .cart-table {min-width:510px}
+  .summary-card,.panel {padding:16px}
+  .admin-nav {padding:12px}
+  .admin-nav a.workspace-link {font-size:10px;padding:8px 7px}
+  .admin-nav button#admin-logout {font-size:10px;padding:8px}
+  .stat {padding:14px}
+  .stat .number {font-size:25px}
+  .login-card {padding:24px 18px}
+  .footer-grid {grid-template-columns:minmax(0,1fr)}
+  .storefront-home {width:calc(100% - 28px)}
+  .storefront-header {gap:8px}
+  .storefront-logo {font-size:14px}
+  .storefront-header-actions {gap:8px}
+  .storefront-header-cta {padding:10px 11px;font-size:10px}
+  .storefront-category-image {height:112px}
+  .storefront-category-info {padding:10px}
+  .storefront-category-info h3 {font-size:12px}
+  .marketing-nav-actions .btn {padding:10px 12px;font-size:10px}
+  .marketing-proofline {flex-wrap:wrap;gap:7px}
+}
+@media(max-width:360px) {
+  .site-header-top>.brand {flex-basis:100%}
+  .header-links {order:2}
+  .storefront-header {align-items:flex-start}
+  .storefront-header-actions {width:100%;justify-content:space-between;margin-left:0}
+  .marketing-nav-actions {width:100%;margin-left:0}
+  .marketing-nav-actions .btn {flex:1 1 auto}
+  .product-grid {grid-template-columns:minmax(0,1fr)}
+  .category-grid {grid-template-columns:minmax(0,1fr)}
+}

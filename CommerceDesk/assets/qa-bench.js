@@ -84,7 +84,7 @@ function qaCatalog(){
  '<div class="tech-source-body"><div class="tech-tags"><span>'+qaEsc(t.framework)+'</span><span>'+qaEsc(t.file)+'</span><span>Line '+qaEsc(t.line)+'</span></div>'+
  '<p><b>Actual assertion / technical check from source</b></p><pre>'+qaEsc(t.excerpt||'See source for implementation')+'</pre>'+
  '<p class="fine">The test source location and assertion are shown for traceability. CI results are shown in the separate CI & artifacts section; test code alone is not evidence of execution.</p>'+
- '<div class="cardlinks"><a href="'+qaSrcLink(t)+'" target="_blank" rel="noopener noreferrer">View exact source line ↗</a><a href="'+qaCiWorkflowLink((C.workflows||[])[0]?.path)+'" target="_blank" rel="noopener noreferrer">CI workflows ↗</a></div></div></details>').join('')+'</div>'+
+ '<div class="fine">Source location and CI evidence are shown in this QA Bench without outbound repository links.</div></div></details>').join('')+'</div>'+
  (filtered.length?'':'<div class="note">No source-backed tests in this category yet; this is a visibility gap, not a pass.</div>')+'</section>';
 }
 async function qaRefreshCi(){
@@ -114,7 +114,7 @@ function qaCiView(){
  '<div class="grid">'+workflows.map(w=>{const run=qaCiResult(w.path);return '<article class="panel"><div class="row"><strong>'+qaEsc(w.name)+'</strong>'+qaBadge(run?run.conclusion||run.status:'Not checked')+'</div>'+
  '<p>'+qaEsc(w.description||'Repository workflow')+'</p><p class="fine">Workflow: '+qaEsc(w.path)+'</p>'+
  (run?'<p class="fine">Started '+qaEsc(run.run_started_at)+' · '+qaEsc(run.head_sha.slice(0,10))+'</p>':'<p class="fine">No verified result loaded for this workflow.</p>')+
- '<div class="cardlinks"><a href="'+qaCiWorkflowLink(w.path)+'" target="_blank" rel="noopener noreferrer">Workflow history ↗</a> '+qaCiLink(run)+'</div></article>'}).join('')+'</div>'+
+ '<div class="fine">Workflow execution evidence is shown in this QA Bench.</div></article>'}).join('')+'</div>'+
  '<div class="panel"><h3>Recent real workflow runs</h3>'+
  (relevant.length?'<div class="tablewrap"><table><thead><tr><th>Workflow</th><th>Outcome</th><th>Git SHA</th><th>Run started</th><th>Evidence</th></tr></thead><tbody>'+relevant.map(r=>'<tr><td>'+qaEsc(r.name)+'</td><td>'+qaBadge(r.conclusion||r.status)+'</td><td><code>'+qaEsc(r.head_sha.slice(0,10))+'</code></td><td>'+qaEsc(r.run_started_at)+'</td><td>'+qaCiLink(r)+'</td></tr>').join('')+'</tbody></table></div>':'<p class="fine">No verified workflow runs loaded. Refresh to check GitHub; do not infer that a test passed.</p>')+
  '</div><div class="panel"><h3>Artifacts and failure investigation</h3><p>GitHub Actions run details provide step logs and available downloaded artifacts. Failed runs remain visible alongside later successful runs, showing debugging and regression history.</p>'+

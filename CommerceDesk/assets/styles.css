@@ -138,7 +138,7 @@ body.marketing-home .page-main{width:100%;max-width:none;padding:0;margin:0;min-
 .marketing-demo-copy .marketing-eyebrow{color:#9dbce5}
 .marketing-demo-copy h2{font-size:39px}
 .marketing-demo-copy>p{font-size:12px;line-height:1.85;color:#c1d0e2;margin:17px 0 22px;max-width:350px}
-.marketing-demo-copy .btn{background:#fff;color:#0b2545;border-color:#fff}
+.marketing-demo-copy .btn-primary{background:#fff!important;color:#0b2545!important;border-color:#fff!important}.marketing-demo-copy .btn-primary:hover{background:#fff!important;color:#0b2545!important;border-color:#fff!important}
 .marketing-demo-copy>small{display:block;color:#a9bad0;font-size:9px;margin-top:12px}
 .marketing-demo-panels{display:grid;grid-template-columns:1fr 1fr;gap:13px}
 .marketing-demo-panel{display:block;padding:14px;border:1px solid #3b5576;border-radius:10px;background:#203b5e;color:#fff;transition:transform .18s,box-shadow .18s}
